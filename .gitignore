@@ -1,0 +1,26 @@
+# Java / Maven
+target/
+*.class
+*.log
+*.p12
+HELP.md
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEs (IntelliJ, STS, VS Code)
+.idea/
+*.iws
+*.iml
+*.ipr
+.classpath
+.project
+.settings/
+.factorypath
+.vscode/
+
+# Build files
+build/
+bin/
+
+# OS
+.DS_Store
+Thumbs.db

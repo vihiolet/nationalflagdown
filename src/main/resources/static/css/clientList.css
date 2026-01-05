@@ -1,0 +1,248 @@
+/* 기본 설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    font-family: 'Pretendard', sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 헤더 & 로고 */
+header, .footer-content {
+    padding: 20px 5%;
+}
+
+/* 헤더 컨테이너 추가 */
+.header-container {
+    display: flex;
+    justify-content: space-between; /* 양 끝으로 배치 */
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+/* 언어 선택기 스타일 */
+.lang-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lang-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #888;
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.lang-btn:hover {
+    color: #333;
+}
+
+.lang-btn.active {
+    color: #333;
+    font-weight: bold;
+}
+
+.divider {
+    color: #ddd;
+    font-size: 12px;
+}
+
+/* 검색 섹션 */
+.search-section {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.search-section h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.description {
+    color: #666;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.search-bar .search {
+    width: 350px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.search-bar .button {
+    padding: 10px 25px;
+    background-color: #444;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* 대륙 탭 */
+.continent-tabs {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 40px;
+}
+
+.tab-btn {
+    padding: 15px 25px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    position: relative;
+    transition: 0.3s;
+}
+
+.tab-btn.active {
+    font-weight: bold;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; /* 부모 테두리에 겹치게 */
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: #333;
+}
+
+/* 국가 카드 그리드 */
+.country-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4열 배치 */
+    gap: 30px;
+    padding: 0 10%;
+    margin-bottom: 80px;
+}
+
+.country-card {
+    background-color: #fff;
+    transition: transform 0.2s;
+}
+
+.country-card:hover {
+    transform: translateY(-5px);
+}
+
+.flag-img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    background-color: #f4f4f4;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #eee;
+}
+
+/* 페이징 스타일 */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin: 50px 0 100px 0;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    gap: 5px;
+    align-items: center;
+}
+
+.pagination .page-num {
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    border: 1px solid #eee;
+    transition: all 0.2s;
+}
+
+/* 숫자 버튼 호버 및 활성화 */
+.pagination li a.page-num:hover {
+    background-color: #f8f8f8;
+    border-color: #ccc;
+}
+
+.pagination li a.page-num.active {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+    font-weight: bold;
+}
+
+/* 이전/다음 버튼 */
+.pagination li a.prev, 
+.pagination li a.next {
+    font-weight: bold;
+    color: #666;
+    border: none;
+}
+
+.pagination li a.prev:hover, 
+.pagination li a.next:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+.info {
+    padding: 15px 5px;
+}
+
+.info .name {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.info .capital {
+    color: #888;
+    font-size: 14px;
+}
+
+/* 푸터 */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 60px 0;
+    margin-top: 100px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-content p {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #aaa;
+}
