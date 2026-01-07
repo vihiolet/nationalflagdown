@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import com.start.nationlflagdown.admin.domain.AdmImageVO;
 import com.start.nationlflagdown.admin.domain.AdmNationVO;
 import com.start.nationlflagdown.admin.dto.AdmNationImgsDto;
 import com.start.nationlflagdown.admin.dto.AdmNationListDto;
+import com.start.nationlflagdown.admin.dto.AdmSearchCond;
 import com.start.nationlflagdown.admin.repository.AdmNationRepository;
 import com.start.nationlflagdown.admin.repository.AdmimageRepository;
 
@@ -132,6 +136,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 	}
 	
 	//글 목록
+	//아래 NationList() 메서드 사용하므로 해당 메서드 사용하지 않음
 	@Override
 	public List<AdmNationListDto> selectNation() {
 		
@@ -154,6 +159,23 @@ public class AdmNationServiceImpl implements AdmNationService{
 		 * .map(AdmNationDTO::new) : 
 		 * .collect(Collectors.toList()) : 최종적으로 List<AdmNationDto> 반환
 		 * */
+	}
+	
+	//글 목록
+	//위 selectNation() 메서드에서 페이징 기능 추가
+	@Override
+	public Page<AdmNationListDto> nationList(AdmSearchCond cond, int page){
+		
+		Pageable pageable = PageRequest.of(page - 1, 20);
+		
+		Page<AdmNationVO> nations;
+		nations = nationRepository.search(cond, pageable);
+		
+		return nations.map(admNationVo -> {
+			List<AdmImageVO> imgList = imageRepository.findByNationNationId(admNationVo.getNationId());
+			AdmImageVO firstImgVo = imgList.stream().findFirst().orElse(null); 
+			return new AdmNationListDto(admNationVo, firstImgVo);
+		});		
 	}
 	
 	//글 삭제

@@ -36,7 +36,7 @@ public class NationRepositoryImpl implements NationRepositoryCustom{
 		List<NationVO> content = queryFactory
 				.selectFrom(nationVO)
 				.where(searchCond(cond.getSearch()))
-				.orderBy(nationVO.capitarEn.asc())
+				.orderBy(nationVO.nationCode.asc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetch();

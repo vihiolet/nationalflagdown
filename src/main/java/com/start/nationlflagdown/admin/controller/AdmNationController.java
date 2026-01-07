@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.start.nationlflagdown.admin.dto.AdmNationImgsDto;
 import com.start.nationlflagdown.admin.dto.AdmNationListDto;
+import com.start.nationlflagdown.admin.dto.AdmSearchCond;
 import com.start.nationlflagdown.admin.service.AdmNationService;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 @Controller
 public class AdmNationController {
@@ -112,10 +114,14 @@ public class AdmNationController {
 	
 	//글 목록
 	@GetMapping("/adminNation")
-	public String nationList(Model model) {
+	public String nationList(Model model,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@ModelAttribute("cond") AdmSearchCond cond) {
 		
-		List<AdmNationListDto> nationList = nationService.selectNation();
-		model.addAttribute("nationList", nationList);
+		Page<AdmNationListDto> admNationList = nationService.nationList(cond, page);
+		
+		model.addAttribute("nationList", admNationList);
+		model.addAttribute("cond", cond);	//검색어 유지
 		
 		return "admin/listNation";
 	}
