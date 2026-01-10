@@ -29,7 +29,7 @@ public class AdmNationRepositoryImpl implements AdmRepositoryCustom{
 		List<AdmNationVO> content = queryFactory
 				.selectFrom(admNationVO)
 				.where(searchCond(cond.getSearch()))
-				.orderBy(admNationVO.nationCode.asc())
+				.orderBy(admNationVO.regDate.desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetch();

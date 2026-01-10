@@ -14,49 +14,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Admin - 국가 관리</title>
+    <link rel="stylesheet" href="/css/adminList.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
+    <header class="main-header">
+        <div class="header-left">
+            <h1 class="logo">Logo</h1>
+        </div>
+        <nav class="header-center">
+            <a href="#" class="nav-item active">국가 목록</a>
+            <a href="#" class="nav-item">관리자 목록</a>
+        </nav>
+        <div class="header-right">
+            <div class="profile-circle"></div>
+        </div>
+    </header>
+    <main class="content-container">
+        <section class="content-title-area">
+            <h2 class="content-title">국가목록</h2>
+            <a href="insertNation" class="btn-primary">+ Add new</a>
+        </section>
 
-	<section class="search-section">
-            <form action="adminNation" method = "get" onsubmit="removeEmptyField(this)" id="searchForm" class="search-bar">
-		        <input name="search" type = "text" value="${cond.search}" placeholder="검색" class="search"/>
-		        <input type="submit" value="검색" class="button"/>
+        <section class="filter-bar">
+            <form action="adminNation" method = "get" onsubmit="removeEmptyField(this)" id="searchForm" class="search-form">
+	            <div class="search-box">
+	            	<span class="material-symbols-outlined">search</span>
+			        <input name="search" type = "text" value="${cond.search}" placeholder="Searching..." class="search"/>
+		       </div>
+		       <input type="submit" value="검색" class="btn-search"/>
             </form>
-    </section>
-	
-	
-	<table border="1" cellpadding="0" cellspacing="0" width="700">
-		<tr>
-			<th bgcolor="orange" width="100">번호</th>
-			<th bgcolor="orange" width="200">국가명(한국어)</th>
-			<th bgcolor="orange" width="150">국가명(영어)</th>
-			<th bgcolor="orange" width="150">수도(한국어)</th>
-			<th bgcolor="orange" width="150">수도(영어)</th>
-			<th bgcolor="orange" width="100">대륙</th>
-			<th bgcolor="orange" width="100">국기</th>
-			<th bgcolor="orange" width="100">수정/삭제</th>
-		</tr>
-		<c:forEach items="${nationList.content}" var="nation">
-		<tr>
-			<td>${nation.nationCode}</td>
-			<td>
-				<a href="updateNation?nationId=${nation.nationId}">
-					${nation.nationNameKo}
-				</a>
-			</td>
-			<td>${nation.nationNameEn}</td>
-			<td>${nation.capitarKo}</td>
-			<td>${nation.capitarEn}</td>
-			<td>${nation.continent}</td>
-			<td><img src="${nation.imgUrl}" style="max-width: 100px; height: auto;"></td>
-			<td>
-				<a href="updateNation?nationId=${nation.nationId}">수정</a>
-				<a href="deleteNation?nationId=${nation.nationId}">삭제</a>
-			</td>
-		</tr> 
-		</c:forEach>
-	</table>
+            <div class="filter-options">
+                <button type="button" id="sortOrderBtn" class="btn-filter" onclick="toggleSort()">
+                    등록일순 <span class="arrow">↑</span>
+                </button>
+                
+                <div class="select-wrapper">
+                    <label for="continent-select">대륙</label>
+                    <select id="continent-select" class="select-custom">
+                        <option value="all">All</option>
+                        <option value="asia">아시아</option>
+                        <option value="europe">유럽</option>
+                        <option value="america">아메리카</option>
+                        <option value="africa">아프리카</option>
+                        <option value="oceania">오세아니아</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <div class="info-banner">
+            <div class="info-text">
+                💡 새로운 국가 데이터를 등록하거나 기존 정보를 효율적으로 관리할 수 있습니다.
+            </div>
+            <button class="btn-help">
+                <span class="material-symbols-outlined">help_outline</span>
+                도움말
+            </button>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>국가명</th>
+                        <th>국가명(영어)</th>
+                        <th>수도</th>
+                        <th>수도(영어)</th>
+                        <th>대륙</th>
+                        <th>국기 썸네일</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<c:forEach items="${nationList.content}" var="nation">
+	                    <tr>
+	                        <td class="font-bold">
+	                        	<a href="updateNation?nationId=${nation.nationId}">${nation.nationNameKo}</a>
+							</td>
+	                        <td class="font-bold">${nation.nationNameEn}</td>
+	                        <td>${nation.capitarKo}</td>
+	                        <td>${nation.capitarEn}</td>
+	                        <td><span class="badge badge-asia">${nation.continent}</span></td>
+	                        <td><img src="${nation.imgUrl}" style="max-width: 100px; height: auto;"></td>
+	                        <td>
+	                            <a href="updateNation?nationId=${nation.nationId}" class="btn-icon edit">
+	                            	<span class="material-symbols-outlined">edit</span>
+	                            </a>
+	                            <a href="deleteNation?nationId=${nation.nationId}" class="btn-icon delete">
+	                            	<span class="material-symbols-outlined">delete</span>
+	                            </a>
+	                        </td>
+	                    </tr>
+	                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    
 	 <div class="pagination-container">
         <!--페이징 블록 세팅-->
 		<c:set var="blockLimit" value="5" /> <!-- 한 블록에 보여줄 번호 개수 -->
@@ -99,9 +155,6 @@
             </c:if>
         </div>
     </div>
-	
-	<a href="insertNation">새 글 등록</a>
-	
 	<script>
 	
 	function removeEmptyField(form){

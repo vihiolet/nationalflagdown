@@ -166,7 +166,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 	@Override
 	public Page<AdmNationListDto> nationList(AdmSearchCond cond, int page){
 		
-		Pageable pageable = PageRequest.of(page - 1, 20);
+		Pageable pageable = PageRequest.of(page - 1, 5);
 		
 		Page<AdmNationVO> nations;
 		nations = nationRepository.search(cond, pageable);
