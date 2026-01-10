@@ -187,12 +187,12 @@ header, .footer-content {
 }
 
 /* 숫자 버튼 호버 및 활성화 */
-.pagination li a.page-num:hover {
+.pagination page-num:hover {
     background-color: #f8f8f8;
     border-color: #ccc;
 }
 
-.pagination li a.page-num.active {
+.pagination page-num.active {
     background-color: #333;
     color: #fff;
     border-color: #333;
@@ -200,15 +200,15 @@ header, .footer-content {
 }
 
 /* 이전/다음 버튼 */
-.pagination li a.prev, 
-.pagination li a.next {
+.pagination prev, 
+.pagination next {
     font-weight: bold;
     color: #666;
     border: none;
 }
 
-.pagination li a.prev:hover, 
-.pagination li a.next:hover {
+.pagination prev:hover, 
+.pagination next:hover {
     color: #000;
     text-decoration: underline;
 }
