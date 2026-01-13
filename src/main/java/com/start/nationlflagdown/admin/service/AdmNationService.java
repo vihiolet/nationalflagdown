@@ -15,7 +15,7 @@ public interface AdmNationService {
 	
 	Long insertNation(AdmNationImgsDto form, List<MultipartFile> file) throws IOException;
 	
-	void updateNation(Long nationId, AdmNationImgsDto form,  MultipartFile file) throws IOException;
+	void updateNation(Long nationId, AdmNationImgsDto form, List<MultipartFile> file) throws IOException;
 	
 	List<AdmNationListDto> selectNation();
 	Page<AdmNationListDto> nationList(AdmSearchCond cond, int page);

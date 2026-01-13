@@ -43,21 +43,20 @@ public class AdmNationServiceImpl implements AdmNationService{
 
 	//글 등록 기능
 	@Override
-	public Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadfile) throws IOException {
+	public Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadfiles) throws IOException {
 		
 		AdmNationVO nation = AdmNationVO.createNation(form);
-		
 		AdmNationVO saveNation = nationRepository.save(nation);
 		
-		for(MultipartFile file : uploadfile) {
+		File uploadDir = new File(fileDir);
+		if(!uploadDir.exists()) {
+			uploadDir.mkdir();
+		}
+		
+		for(MultipartFile file : uploadfiles) {
 			
 			String originalFileName = file.getOriginalFilename();
 			String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-			
-			File uploadDir = new File(fileDir);
-			if(!uploadDir.exists()) {
-				uploadDir.mkdir();
-			}
 			
 			file.transferTo(new File(fileDir + uniqueFileName));
 			
@@ -84,9 +83,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 	
 	//글 수정 기능
 	@Override
-	public void updateNation(Long nationId, AdmNationImgsDto form, MultipartFile file) throws IOException {
-		
-		List<Long> imageIds = form.getImageIds();
+	public void updateNation(Long nationId, AdmNationImgsDto form, List<MultipartFile> uplaodfile) throws IOException {
 		
 		//id로 엔티티를 검색(영속 상태로 가져옴)
 		AdmNationVO nation = nationRepository.findById(nationId)
@@ -96,33 +93,54 @@ public class AdmNationServiceImpl implements AdmNationService{
 		 * */
 		
 		//영속 상태이므로 save() 메서드 불필요
-		nation.updateNation(form);	
-		
+		nation.updateNation(form);			
 		
 		//업로드 파일 수정 로직
-		if(file != null && !file.isEmpty()) {		//새로운 파일을 업로드 한 경우
-			
-			String originalFileName = file.getOriginalFilename();
-			String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-			
-			AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
-			image.setNation(nation);
-			imageRepository.save(image);
-			
-			try {
-				file.transferTo(new File(fileDir + uniqueFileName));
-			}catch(IOException e){
-				throw new IOException("파일 저장 실패: " + e.getMessage(), e);
-			}
-		}else if(imageIds != null && !imageIds.isEmpty()) {		//기존에 업로드된 파일이 있을 경우
-			
-			
-			
-		}else {	//새 파일 없고 기존 파일도 없을 경우
-			//파일 없는지 검사하고
-			if(nation.hashFile()) {
-				//엔티티 비우기
-				nation.clearFile();
+//		if(file != null && !file.isEmpty()) {		//새로운 파일을 업로드 한 경우
+//			
+//			String originalFileName = file.getOriginalFilename();
+//			String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+//			
+//			AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
+//			image.setNation(nation);
+//			imageRepository.save(image);
+//			
+//			try {
+//				file.transferTo(new File(fileDir + uniqueFileName));
+//			}catch(IOException e){
+//				throw new IOException("파일 저장 실패: " + e.getMessage(), e);
+//			}
+//		}else if(imageIds != null && !imageIds.isEmpty()) {		//기존에 업로드된 파일이 있을 경우
+//			
+//			
+//			
+//		}else {	//새 파일 없고 기존 파일도 없을 경우
+//			//파일 없는지 검사하고
+//			if(nation.hashFile()) {
+//				//엔티티 비우기
+//				nation.clearFile();
+//			}
+//		}
+		
+//		
+		if(uplaodfile != null && uplaodfile.size() > 0) {
+			for(MultipartFile file : uplaodfile) {
+				if(!file.isEmpty()) {
+					String originalFileName = file.getOriginalFilename();
+	                
+					String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+					
+					AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
+					image.setNation(nation);
+					imageRepository.save(image);
+					
+					try {
+						file.transferTo(new File(fileDir + uniqueFileName));
+					}catch(IOException e){
+						throw new IOException("파일 저장 실패: " + e.getMessage(), e);
+					}		
+				}
+				
 			}
 		}
 				

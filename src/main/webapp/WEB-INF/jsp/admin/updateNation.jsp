@@ -32,10 +32,11 @@
 
         <div class="form-wrapper">
         	<form action="/updateNation?nationId=${nation.nationId}" method="post" enctype="multipart/form-data">
+        		<input type="hidden" id="nationId" name="nationId" value="${nation.nationId}"/>
                 <div class="form-group country-code-area">
                     <label>국가 코드 <span class="required">*</span></label>
                     <div class="input-with-action">
-                        <input type="text" name="nationCode" class="input-code" placeholder="예: KR" maxlength="2" value="${nation.nationCode}">
+                        <input type="text" id="nationCode" name="nationCode" class="input-code" placeholder="예: KR" maxlength="2" value="${nation.nationCode}">
                         <button type="button" class="btn-check">중복 확인</button>
                         <span class="input-tip">ISO 3166-1 alpha-2 기준 (2자리 영문 대문자)</span>
                     </div>
@@ -46,22 +47,22 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>국가명</label>
-                        <input type="text" name="nationNameKo" placeholder="예: 대한민국" value="${nation.nationNameKo}">
+                        <input type="text" id="nationNameKo" name="nationNameKo" name="nationNameKo" placeholder="예: 대한민국" value="${nation.nationNameKo}">
                     </div>
                     <div class="form-group">
                         <label>영문 국가명</label>
-                        <input type="text" name="nationNameEn" placeholder="예: South Korea" value="${nation.nationNameEn}">
+                        <input type="text" id="nationNameEn" name="nationNameEn" placeholder="예: South Korea" value="${nation.nationNameEn}">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>수도명</label>
-                        <input type="text" name="capitarKo" placeholder="예: 서울" value="${nation.capitarKo}">
+                        <input type="text" id="capitarKo" name="capitarKo" placeholder="예: 서울" value="${nation.capitarKo}">
                     </div>
                     <div class="form-group">
                         <label>영문 수도명</label>
-                        <input type="text" name="capitarEn" placeholder="예: Seoul" value="${nation.capitarEn}">
+                        <input type="text" id="capitarEn" name="capitarEn" placeholder="예: Seoul" value="${nation.capitarEn}">
                     </div>
                 </div>
 
@@ -108,7 +109,8 @@
 
                 <div class="form-footer">
                     <button type="button" class="btn-secondary" onclick="history.back()">목록으로</button>
-                    <button type="submit" class="btn-primary">수정</button>
+                    <!--<button type="submit" class="btn-primary">수정</button>-->
+                    <button type="button" onclick="submitForm()" class="btn-primary">수정</button>
                 </div>
             </form>
         </div>
@@ -131,11 +133,18 @@
 		
 		}
 		
+		// 서버로 보낼 파일들을 담을 배열
+		let selectedFiles = [];
+
 		/* 이미지 미리 보기*/
 		function handleImageUpload(input) {
 		    const $container = $('#imagePreviewContainer'); 
 		
 		    Array.from(input.files).forEach(file => {
+		    
+		    	//실제 전송용 파일 추가
+		    	selectedFiles.push(file);
+		    	
 		        const reader = new FileReader(); 
 		
 		        // 파일 읽기가 완료되었을 때 실행될 로직(이벤트 핸들러)
@@ -173,6 +182,45 @@
 		    // 같은 파일을 연달아 등록 가능하도록 버튼 초기화
 		    $(input).val("");
 		}
+		
+		function submitForm() {
+		console.log("전송 직전 파일 배열 상태:", selectedFiles);
+		    const formData = new FormData();
+		    
+		    // 일반 데이터 추가 (id나 기타 폼 데이터)
+		    const continentValue = $('input[name="continent"]:checked').val();
+		    
+		    formData.append("nationId", $('#nationId').val());
+		    formData.append("nationCode", $('#nationCode').val());
+		    formData.append("nationNameKo", $('#nationNameKo').val()); 
+		    formData.append("nationNameEn", $('#nationNameEn').val());
+		    formData.append("capitarKo", $('#capitarKo').val());
+		    formData.append("capitarEn", $('#capitarEn').val());
+		    formData.append("continent", continentValue);  
+		    
+		
+		    // 배열에 담긴 파일들을 formData에 추가
+		    selectedFiles.forEach(file => {
+		        formData.append("uploadFile", file); // 서버 @RequestParam("uploadFile")과 일치
+		    });
+		
+		    $.ajax({
+		        url: '/updateNation',
+		        type: 'POST',
+		        data: formData,
+		        processData: false, // 필수: 데이터를 쿼리 문자열로 변환하지 않음
+		        contentType: false, // 필수: 브라우저가 boundary를 포함한 multipart/form-data를 자동 설정
+		        success: function(response) {
+		            alert("수정되었습니다.");
+		            location.href = "adminNation";
+		        },
+		        error: function(xhr) {
+		            alert("에러 발생: " + xhr.responseText);
+		        }
+		    });
+		}
+		
+		
 	</script>
 </body>
 </html>

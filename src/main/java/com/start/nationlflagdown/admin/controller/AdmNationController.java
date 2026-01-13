@@ -95,11 +95,11 @@ public class AdmNationController {
 	public String updateNation(
 			@RequestParam("nationId") Long nationId,  
 			@ModelAttribute AdmNationImgsDto form
-			, @RequestParam(value = "uploadFile", required = false) MultipartFile file
-			, RedirectAttributes redirectAttributes) throws IOException{
+			, @RequestParam(value = "uploadFile", required = false) List<MultipartFile> uploadFiles
+			, RedirectAttributes redirectAttributes) throws IOException{		
 		
 		//파일 유효성 검사 추후 추가
-		nationService.updateNation(nationId, form, file);
+		nationService.updateNation(nationId, form, uploadFiles);
 		
 		return "redirect:adminNation";
 	}
