@@ -73,12 +73,13 @@ public class AdmNationController {
 		
 		List<Long> imageIds = nation.getImageIds();
 		List<String> imgUrls = nation.getImgUrls();
+		List<String> originalFileName = nation.getOriginalFileName();
 		
 		List<AdmNationImgsDto> imageGroup = new ArrayList<>();
 		
 		for(int i=0; i < imageIds.size(); i++) {
 			
-			AdmNationImgsDto imgtmp = new AdmNationImgsDto(imageIds.get(i), imgUrls.get(i));
+			AdmNationImgsDto imgtmp = new AdmNationImgsDto(imageIds.get(i), imgUrls.get(i), originalFileName.get(i));
 	        imageGroup.add(imgtmp);
 			
 		}

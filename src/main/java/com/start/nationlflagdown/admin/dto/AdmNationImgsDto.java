@@ -20,6 +20,7 @@ public class AdmNationImgsDto {
 	private Long imageId;
 	private List<String> fileName;
 	private List<String> originalFileName;
+	private String viewFileName;
 	
 	private List<String> imgUrls = new ArrayList<>();
 	private String imgUrl;
@@ -52,9 +53,10 @@ public class AdmNationImgsDto {
 	}
 	
 	//이미지 삭제에 쓰는 생성자
-	public AdmNationImgsDto(Long imageId, String imgUrl){
+	public AdmNationImgsDto(Long imageId, String imgUrl, String originalFileName){
 		this.setImageId(imageId); 
 		this.setImgUrl(imgUrl);
+		this.setViewFileName(originalFileName);
 	}
 	
 	public Long getNationId() {
@@ -144,6 +146,14 @@ public class AdmNationImgsDto {
 
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+
+	public String getViewFileName() {
+		return viewFileName;
+	}
+
+	public void setViewFileName(String viewFileName) {
+		this.viewFileName = viewFileName;
 	}
 
 }
