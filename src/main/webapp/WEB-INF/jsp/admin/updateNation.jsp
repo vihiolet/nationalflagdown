@@ -31,7 +31,7 @@
         </section>
 
         <div class="form-wrapper">
-        	<form action="/updateNation?nationId=${nation.nationId}" method="post" enctype="multipart/form-data">
+        	<form method="post" enctype="multipart/form-data">
         		<input type="hidden" id="nationId" name="nationId" value="${nation.nationId}"/>
                 <div class="form-group country-code-area">
                     <label>국가 코드 <span class="required">*</span></label>
@@ -184,10 +184,8 @@
 		}
 		
 		function submitForm() {
-		console.log("전송 직전 파일 배열 상태:", selectedFiles);
 		    const formData = new FormData();
 		    
-		    // 일반 데이터 추가 (id나 기타 폼 데이터)
 		    const continentValue = $('input[name="continent"]:checked').val();
 		    
 		    formData.append("nationId", $('#nationId').val());

@@ -43,7 +43,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 
 	//글 등록 기능
 	@Override
-	public Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadfiles) throws IOException {
+	public Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadfile) throws IOException {
 		
 		AdmNationVO nation = AdmNationVO.createNation(form);
 		AdmNationVO saveNation = nationRepository.save(nation);
@@ -53,7 +53,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 			uploadDir.mkdir();
 		}
 		
-		for(MultipartFile file : uploadfiles) {
+		for(MultipartFile file : uploadfile) {
 			
 			String originalFileName = file.getOriginalFilename();
 			String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
@@ -61,8 +61,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 			file.transferTo(new File(fileDir + uniqueFileName));
 			
 			//엔티티 생성 후 값 세팅
-			AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
-			
+			AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);		
 			image.setNation(saveNation);
 			imageRepository.save(image);	
 		}
@@ -95,7 +94,26 @@ public class AdmNationServiceImpl implements AdmNationService{
 		//영속 상태이므로 save() 메서드 불필요
 		nation.updateNation(form);			
 		
-		//업로드 파일 수정 로직
+		if(uplaodfile != null && uplaodfile.size() > 0) {
+			for(MultipartFile file : uplaodfile) {
+				if(!file.isEmpty()) {
+					
+					String originalFileName = file.getOriginalFilename();
+	                String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+					
+					AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
+					image.setNation(nation);
+					imageRepository.save(image);
+					
+					try {
+						file.transferTo(new File(fileDir + uniqueFileName));
+					}catch(IOException e){
+						throw new IOException("파일 저장 실패: " + e.getMessage(), e);
+					}		
+				}				
+			}
+		}
+		
 //		if(file != null && !file.isEmpty()) {		//새로운 파일을 업로드 한 경우
 //			
 //			String originalFileName = file.getOriginalFilename();
@@ -121,28 +139,6 @@ public class AdmNationServiceImpl implements AdmNationService{
 //				nation.clearFile();
 //			}
 //		}
-		
-//		
-		if(uplaodfile != null && uplaodfile.size() > 0) {
-			for(MultipartFile file : uplaodfile) {
-				if(!file.isEmpty()) {
-					String originalFileName = file.getOriginalFilename();
-	                
-					String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-					
-					AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
-					image.setNation(nation);
-					imageRepository.save(image);
-					
-					try {
-						file.transferTo(new File(fileDir + uniqueFileName));
-					}catch(IOException e){
-						throw new IOException("파일 저장 실패: " + e.getMessage(), e);
-					}		
-				}
-				
-			}
-		}
 				
 	}
 	
