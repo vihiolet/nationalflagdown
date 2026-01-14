@@ -59,6 +59,8 @@ public class AdmNationImgsDto {
 		this.setViewFileName(originalFileName);
 	}
 	
+	
+	
 	public Long getNationId() {
 		return nationId;
 	}

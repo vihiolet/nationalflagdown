@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - 국가 정보 수정</title>
+    <title>Admin - 국가 정보 등록</title>
     <link rel="stylesheet" href="/css/adminList.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -27,11 +27,11 @@
         </section>
 
         <div class="form-wrapper">
-            <form action="insertNation" method="post" enctype="multipart/form-data">            
+            <form method="post" enctype="multipart/form-data">            
                 <div class="form-group country-code-area">
                     <label>국가 코드 <span class="required">*</span></label>
                     <div class="input-with-action">
-                        <input type="text" name="nationCode" class="input-code" placeholder="예: KR" maxlength="2">
+                        <input type="text" id="nationCode" name="nationCode" class="input-code" placeholder="예: KR" maxlength="2">
                         <button type="button" class="btn-check">중복 확인</button>
                         <span class="input-tip">ISO 3166-1 alpha-2 기준 (2자리 영문 대문자)</span>
                     </div>
@@ -42,22 +42,22 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>국가명</label>
-                        <input type="text" name="nationNameKo" placeholder="예: 대한민국">
+                        <input type="text" id="nationNameKo" name="nationNameKo" placeholder="예: 대한민국">
                     </div>
                     <div class="form-group">
                         <label>영문 국가명</label>
-                        <input type="text" name="nationNameEn" placeholder="예: South Korea">
+                        <input type="text" id="nationNameEn" name="nationNameEn" placeholder="예: South Korea">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>수도명</label>
-                        <input type="text" name="capitarKo" placeholder="예: 서울">
+                        <input type="text" id="capitarKo" name="capitarKo" placeholder="예: 서울">
                     </div>
                     <div class="form-group">
                         <label>영문 수도명</label>
-                        <input type="text" name="capitarEn" placeholder="예: Seoul">
+                        <input type="text" id="capitarEn" name="capitarEn" placeholder="예: Seoul">
                     </div>
                 </div>
 
@@ -88,30 +88,28 @@
 
                 <div class="form-footer">
                     <button type="button" class="btn-secondary" onclick="history.back()">목록으로</button>
-                    <button type="submit" class="btn-primary">등록</button>
+                    <button type="button" class="btn-primary" onclick="submitForm()">등록</button>
                 </div>
             </form>
         </div>
     </main>
     <script>
+    	let selectedFiles = [];
+    	
     	/* 이미지 미리 보기*/
 		function handleImageUpload(input) {
 		    const $container = $('#imagePreviewContainer'); 
 		
 		    Array.from(input.files).forEach(file => {
+		    
+		    	selectedFiles.push(file);
+		    	
 		        const reader = new FileReader(); 
-		
-		        // 파일 읽기가 완료되었을 때 실행될 로직(이벤트 핸들러)
 		        reader.onload = function(e) {
-		            // 1. jQuery 문법으로 카드 생성 ($('<div/>'))
 		            const $card = $('<div/>', { class: 'image-card' });
-		
-		            // 2. 이미지 영역 생성
 		            const $imgBox = $('<div/>', { class: 'img-box' }).append(
 		                $('<img/>', { src: e.target.result }) //readAsDataURL로 얻은 결과값
 		            );
-		
-		            // 3. 파일명과 삭제 버튼 생성
 		            const $imgInfo = $('<div/>', { class: 'img-info' }).append(
 		                $('<span/>', { class: 'file-name', text: file.name }),
 		                $('<button/>', { 
@@ -123,18 +121,44 @@
 		                    }
 		                })
 		            );
-		
-		            // 4. 생성한 요소 추가
 		            $card.append($imgBox, $imgInfo);
 		            $container.append($card);
 		        };
-		
-		        // 실제로 파일을 읽기 시작
 		        reader.readAsDataURL(file);
 		    });
-		
-		    // 같은 파일을 연달아 등록 가능하도록 버튼 초기화
 		    $(input).val("");
+		}
+		
+		function submitForm(){
+			const formData = new FormData();
+			
+			const continenValue = $('input[name="continent"]:checked').val();
+			formData.append("nationCode", $('#nationCode').val());
+			formData.append("nationNameKo", $('#nationNameKo').val());
+			formData.append("nationNameEn", $('#nationNameEn').val());
+			formData.append("capitarKo", $('#capitarKo').val());
+			formData.append("capitarEn", $('#capitarEn').val());
+			formData.append("continent", continenValue);
+			
+			console.log("보낼 파일들:", selectedFiles);
+			
+			selectedFiles.forEach(file => {
+				formData.append("uploadFile", file);
+			});
+			$.ajax({
+				url: '/insertNation',
+				type: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(response){
+					alert("등록되었습니다.");
+					location.href = "adminNation";
+				},
+				error: function(xhr){
+					alert("에러 발생: " + xhr.responseText);
+				}
+			});
 		}
     	
     </script>

@@ -43,7 +43,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 
 	//글 등록 기능
 	@Override
-	public Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadfile) throws IOException {
+	public Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadFiles) throws IOException {
 		
 		AdmNationVO nation = AdmNationVO.createNation(form);
 		AdmNationVO saveNation = nationRepository.save(nation);
@@ -53,17 +53,25 @@ public class AdmNationServiceImpl implements AdmNationService{
 			uploadDir.mkdir();
 		}
 		
-		for(MultipartFile file : uploadfile) {
-			
-			String originalFileName = file.getOriginalFilename();
-			String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-			
-			file.transferTo(new File(fileDir + uniqueFileName));
-			
-			//엔티티 생성 후 값 세팅
-			AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);		
-			image.setNation(saveNation);
-			imageRepository.save(image);	
+		if(uploadFiles != null && uploadFiles.size() > 0) {
+			for(MultipartFile file : uploadFiles) {
+				if(!file.isEmpty()) {
+					
+					String originalFileName = file.getOriginalFilename();
+					String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+					
+					//엔티티 생성 후 값 세팅
+					AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);		
+					image.setNation(saveNation);
+					imageRepository.save(image);	
+					
+					try {
+						file.transferTo(new File(fileDir + uniqueFileName));
+					}catch(IOException e){
+						throw new IOException("파일 저장 실패: " + e.getMessage(), e);
+					}	
+				}
+			}
 		}
 		return saveNation.getNationId();
 	}
@@ -82,20 +90,18 @@ public class AdmNationServiceImpl implements AdmNationService{
 	
 	//글 수정 기능
 	@Override
-	public void updateNation(Long nationId, AdmNationImgsDto form, List<MultipartFile> uplaodfile) throws IOException {
+	public void updateNation(Long nationId, AdmNationImgsDto form, List<MultipartFile> uploadFile) throws IOException {
 		
 		//id로 엔티티를 검색(영속 상태로 가져옴)
 		AdmNationVO nation = nationRepository.findById(nationId)
 				.orElseThrow(() -> new IllegalArgumentException("Nation ID(" + nationId + ")를 찾을 수 없습니다."));
-		/*
-		 * findById(Long Id)는 Optional<T> 타입으로 반환하는데 nation은 AdmNationVO 타입이 orElseThrow()를 사용하여 객체 추출
-		 * */
+		//findById(Long Id)는 Optional<T> 타입으로 반환하는데 nation은 AdmNationVO 타입이 orElseThrow()를 사용하여 객체 추출
 		
 		//영속 상태이므로 save() 메서드 불필요
 		nation.updateNation(form);			
 		
-		if(uplaodfile != null && uplaodfile.size() > 0) {
-			for(MultipartFile file : uplaodfile) {
+		if(uploadFile != null && uploadFile.size() > 0) {
+			for(MultipartFile file : uploadFile) {
 				if(!file.isEmpty()) {
 					
 					String originalFileName = file.getOriginalFilename();
@@ -130,16 +136,13 @@ public class AdmNationServiceImpl implements AdmNationService{
 //			}
 //		}else if(imageIds != null && !imageIds.isEmpty()) {		//기존에 업로드된 파일이 있을 경우
 //			
-//			
-//			
 //		}else {	//새 파일 없고 기존 파일도 없을 경우
 //			//파일 없는지 검사하고
 //			if(nation.hashFile()) {
 //				//엔티티 비우기
 //				nation.clearFile();
 //			}
-//		}
-				
+//		}				
 	}
 	
 	//수정 form에서 이미지 삭제

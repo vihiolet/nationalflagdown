@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,6 +21,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 
 @Controller
 public class AdmNationController {
@@ -42,7 +44,7 @@ public class AdmNationController {
 	@PostMapping("/insertNation")
 	public String insertNation(
 			@ModelAttribute AdmNationImgsDto form
-			, @RequestParam("uploadFile") List<MultipartFile> file
+			, @RequestParam(value = "uploadFile", required = false) List<MultipartFile> uploadFiles
 			, RedirectAttributes redirectAttributes) throws IOException {
 		
 		//파일 검사
@@ -59,9 +61,18 @@ public class AdmNationController {
 //		}
 		
 		//Long newNationId = 
-				nationService.insertNation(form, file);
+				nationService.insertNation(form, uploadFiles);
 		//redirectAttributes.addFlashAttribute(newNationId);
 		return "redirect:adminNation";
+		
+		//디버깅 예외 던지는 코드
+//		try {
+//	        nationService.insertNation(form, file);
+//	        return ResponseEntity.ok("Success: Data saved");
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	        return ResponseEntity.status(500).body("Error: " + e.getMessage());
+//	    }
 		
 	}
 	

@@ -13,7 +13,7 @@ import com.start.nationlflagdown.admin.dto.AdmSearchCond;
 
 public interface AdmNationService {
 	
-	Long insertNation(AdmNationImgsDto form, List<MultipartFile> file) throws IOException;
+	Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadFiles) throws IOException;
 	
 	void updateNation(Long nationId, AdmNationImgsDto form, List<MultipartFile> file) throws IOException;
 	
