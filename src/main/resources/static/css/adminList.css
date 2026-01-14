@@ -48,9 +48,13 @@ body {
 
 /* Buttons */
 .btn-primary { 
-    font-size: 10px;
-    background: var(--primary-color); color: white; border: none; 
-    padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;
+    background: var(--primary-color);
+    color: white;
+    border: none; 
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
 }
 
 /* Search */
@@ -95,6 +99,7 @@ body {
 .font-bold { font-weight: 600; }
 .text-right { text-align: right; }
 
+
 .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
 .badge-asia { background: #fff4e5; color: #ff9800; }
 .badge-europe { background: #eef2ff; color: #4338ca; }
@@ -128,12 +133,12 @@ body {
 }
 
 /* 숫자 버튼 호버 및 활성화 */
-.pagination page-num:hover {
+.pagination .page-num:hover {
     background-color: #f8f8f8;
     border-color: #ccc;
 }
 
-.pagination page-num.active {
+.pagination .page-num.active {
     background-color: #333;
     color: #fff;
     border-color: #333;
@@ -141,15 +146,15 @@ body {
 }
 
 /* 이전/다음 버튼 */
-.pagination prev, 
-.pagination next {
+.pagination .prev, 
+.pagination .next {
     font-weight: bold;
     color: #666;
     border: none;
 }
 
-.pagination prev:hover, 
-.pagination next:hover {
+.pagination .prev:hover, 
+.pagination .next:hover {
     color: #000;
     text-decoration: underline;
 }

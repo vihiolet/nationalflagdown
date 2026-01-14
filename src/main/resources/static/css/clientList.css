@@ -67,7 +67,7 @@ header, .footer-content {
 /* 검색 섹션 */
 .search-section {
     text-align: center;
-    padding: 60px 20px;
+    padding: 30px 20px;
 }
 
 .search-section h2 {
@@ -156,11 +156,17 @@ header, .footer-content {
 
 .flag-img {
     width: 100%;
-    aspect-ratio: 3 / 2;
-    background-color: #f4f4f4;
     background-size: cover;
     background-position: center;
-    border: 1px solid #eee;
+    border: 1px solid #ccc;
+}
+
+.flag-img img{
+	width: 100%;            /* 가로를 꽉 채움 */
+    aspect-ratio: 16 / 9;   /* ★중요: 원하는 비율 고정 (예: 16:9 또는 4:3) */
+    object-fit: cover;      /* ★중요: 비율을 유지하며 컨테이너를 가득 채움 (남는 부분은 잘림) */
+    object-position: center; /* 이미지의 중심을 기준으로 맞춤 */
+    display: block;
 }
 
 /* 페이징 스타일 */
@@ -187,12 +193,12 @@ header, .footer-content {
 }
 
 /* 숫자 버튼 호버 및 활성화 */
-.pagination page-num:hover {
+.pagination .page-num:hover {
     background-color: #f8f8f8;
     border-color: #ccc;
 }
 
-.pagination page-num.active {
+.pagination .page-num.active {
     background-color: #333;
     color: #fff;
     border-color: #333;

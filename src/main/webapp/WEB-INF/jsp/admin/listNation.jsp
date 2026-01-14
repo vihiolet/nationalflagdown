@@ -34,7 +34,7 @@
     <main class="content-container">
         <section class="content-title-area">
             <h2 class="content-title">국가목록</h2>
-            <a href="insertNation" class="btn-primary">+ Add new</a>
+            <a href="insertNation" class="btn-primary">새 국가 등록</a>
         </section>
 
         <section class="filter-bar">
@@ -68,10 +68,7 @@
             <div class="info-text">
                 💡 새로운 국가 데이터를 등록하거나 기존 정보를 효율적으로 관리할 수 있습니다.
             </div>
-            <button class="btn-help">
-                <span class="material-symbols-outlined">help_outline</span>
-                도움말
-            </button>
+            <!--<button class="btn-help"><span class="material-symbols-outlined">help_outline</span>도움말</button>-->
         </div>
 
         <div class="table-wrapper">
@@ -93,11 +90,25 @@
 	                        <td class="font-bold">
 	                        	<a href="updateNation?nationId=${nation.nationId}">${nation.nationNameKo}</a>
 							</td>
-	                        <td class="font-bold">${nation.nationNameEn}</td>
-	                        <td>${nation.capitarKo}</td>
-	                        <td>${nation.capitarEn}</td>
-	                        <td><span class="badge badge-asia">${nation.continent}</span></td>
-	                        <td><img src="${nation.imgUrl}" style="max-width: 100px; height: auto;"></td>
+	                        <td class="font-bold">
+	                        	<a href="updateNation?nationId=${nation.nationId}">${nation.nationNameEn}</a>
+	                        </td>
+	                        <td>
+	                        	<a href="updateNation?nationId=${nation.nationId}">${nation.capitarKo}</a>
+	                        </td>
+	                        <td>
+	                        	<a href="updateNation?nationId=${nation.nationId}">${nation.capitarEn}</a>
+	                        </td>
+	                        <td>
+	                        	<a href="updateNation?nationId=${nation.nationId}">
+	                        		<span class="badge badge-asia">${nation.continent}</span>
+	                        	</a>
+	                        </td>
+	                        <td>
+	                        	<a href="updateNation?nationId=${nation.nationId}">
+	                        		<img src="${nation.imgUrl}" style="max-width: 100px; height: auto;">
+	                        	</a>
+	                        </td>
 	                        <td>
 	                            <a href="updateNation?nationId=${nation.nationId}" class="btn-icon edit">
 	                            	<span class="material-symbols-outlined">edit</span>

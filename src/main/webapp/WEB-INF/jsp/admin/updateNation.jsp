@@ -19,7 +19,7 @@
     <header class="main-header">
         <div class="header-left"><h1 class="logo">Logo</h1></div>
         <nav class="header-center">
-            <a href="#" class="nav-item active">국가목록</a>
+            <a href="/adminNation" class="nav-item active">국가 목록</a>
             <a href="#" class="nav-item">관리자 목록</a>
         </nav>
         <div class="header-right"><div class="profile-circle"></div></div>
@@ -108,8 +108,7 @@
                 </div>
 
                 <div class="form-footer">
-                    <button type="button" class="btn-secondary" onclick="history.back()">목록으로</button>
-                    <!--<button type="submit" class="btn-primary">수정</button>-->
+                    <button type="button" class="btn-secondary" onclick="location.href='/adminNation'">목록</button>
                     <button type="button" onclick="submitForm()" class="btn-primary">수정</button>
                 </div>
             </form>
