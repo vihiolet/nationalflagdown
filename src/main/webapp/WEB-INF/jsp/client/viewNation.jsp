@@ -95,7 +95,12 @@
 		                    <td class="file-name">${img.fileName}</td>
 		                    <td>${img.size} KB</td>
 		                    <td>${img.width} X ${img.hight}</td>
-		                    <td><button class="btn-table-download">다운로드</button></td>
+		                    <td>
+		                    	<a href="/viewNationDown/${img.nationId}/${img.imageId}" class="btn-table-download" onclick="increaseCountDisplay()" download="국기_이미지.png">
+		                    	<!--<button class="btn-table-download">다운로드</button>-->
+		                    	다운로드
+		                    	</a>
+		                    </td>
 		                </tr>
 		            </c:forEach>
 	            </tbody>
