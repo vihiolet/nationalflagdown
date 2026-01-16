@@ -20,11 +20,11 @@
 	    	<c:set var="currentLang" value="${empty param.lang ? 'ko' : param.lang}" />
 	        <a href="nation"><h1 class="logo">LOGO</h1></a>
 	        <div class="lang-selector">
-	            <a href ="nation?lang=ko" class="lang-btn ${empty param.lang || param.lang eq 'ko' ? 'active' : ''}">
+	            <a href ="viewNation?nationId=${param.nationId}&lang=ko" class="lang-btn ${empty param.lang || param.lang eq 'ko' ? 'active' : ''}">
 	            	<spring:message code="message.language.ko"/>
 	            </a>
 	            <span class="divider">|</span>
-	            <a href ="nation?lang=en" class="lang-btn ${param.lang eq 'en' ? 'active' : ''}">
+	            <a href ="viewNation?nationId=${param.nationId}&lang=en" class="lang-btn ${param.lang eq 'en' ? 'active' : ''}">
 					<spring:message code="message.language.en"/>
 				</a>
 	        </div>
