@@ -56,7 +56,7 @@
 	        <div class="stats-inline">
 	            <span class="stat-text"><spring:message code ="message.view.downloadViewCnt"/> <strong>${nation.viewCnt}</strong></span>
 	            <span class="stat-divider">|</span>
-	            <span class="stat-text"><spring:message code ="message.view.downloadDownCnt"/> <strong>${nation.downCnt}</strong></span>
+	            <span class="stat-text"><spring:message code ="message.view.downloadDownCnt"/> <strong id="downCnt">${nation.downCnt}</strong></span>
 	        </div>
 	    </div>
 	
