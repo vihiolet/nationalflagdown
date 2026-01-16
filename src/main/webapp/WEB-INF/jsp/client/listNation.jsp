@@ -144,7 +144,8 @@
 		const currentContinent = form.querySelector('input[name="continent"]');
 	    if (!searchInput.value.trim()) { //trim()은 양쪽 공백 제거한 문자열을 반환 즉 반환되는 문자열이 없을 경우
 	        searchInput.disabled = true; // 비어있으면 전송하지 않음
-	    }else if(!currentContinent.value.trim()){
+	    }
+	    if(!currentContinent.value.trim()){
 	    	currentContinent.disabled = true;
 	    }
 	}
