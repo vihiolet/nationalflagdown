@@ -10,12 +10,14 @@ public class NationImgDto {
 	private int width;
 	private int height;
 	private String size;
+	private String imageType;
 	
-	public NationImgDto(Long nationId, Long imageId, String imgUrl, String originalFileName) { 
+	public NationImgDto(Long nationId, Long imageId, String imgUrl, String originalFileName, String imageType) { 
 		this.nationId = nationId;
 		this.imageId = imageId;
 		this.imgUrl = imgUrl;
 		this.fileName = originalFileName;
+		this.imageType = imageType;
 	}
 	
 	public Long getNationId() {
@@ -64,6 +66,14 @@ public class NationImgDto {
 
 	public void setSize(String size) {
 		this.size = size;
+	}
+
+	public String getImageType() {
+		return imageType;
+	}
+
+	public void setImageType(String imagetype) {
+		this.imageType = imagetype;
 	}
 
 }

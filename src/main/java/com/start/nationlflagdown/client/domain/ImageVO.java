@@ -18,7 +18,7 @@ public class ImageVO {
 	private NationVO nation;	//참조할 엔티티 객체를 필드로 사용(엔티티 필드라고 한다)
 	private String fileName;
 	private String originalFileName;
-	
+	private String imageType;
 	
 	protected ImageVO() {}
 	
@@ -57,6 +57,14 @@ public class ImageVO {
 
 	public void setOriginalFileName(String originalFileName) {
 		this.originalFileName = originalFileName;
+	}
+
+	public String getImageType() {
+		return imageType;
+	}
+
+	public void setImageType(String imageType) {
+		this.imageType = imageType;
 	}
 	
 	

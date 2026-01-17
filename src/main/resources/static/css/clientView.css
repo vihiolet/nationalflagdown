@@ -277,6 +277,7 @@ header, .footer-content {
 
 .badge.origin { background-color: #28a745; }
 .badge.circle { background-color: #fd7e14; }
+.badge.square { background-color: blue; }
 
 .file-name { font-weight: 500; }
 

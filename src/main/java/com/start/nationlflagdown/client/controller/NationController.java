@@ -116,21 +116,21 @@ public class NationController {
 		
 		List<Long> imageIds = nation.getImageIds();
 		List<String> imgUrls = nation.getImgUrls();
-		List<String> OriginalfileNames = nation.getOriginalFileName();
+		List<String> originalfileNames = nation.getOriginalFileName();
 		List<String> fileNames = nation.getFileName();
+		List<String> imageType = nation.getTypeList();
 		
 		List<NationImgDto> imageGroup = new ArrayList<>();
 		
 		for(int i = 0; i < imageIds.size(); i++) {
 			
-			NationImgDto imgtmp = new NationImgDto(nationId, imageIds.get(i), imgUrls.get(i), OriginalfileNames.get(i));
+			NationImgDto imgtmp = new NationImgDto(nationId, imageIds.get(i), imgUrls.get(i), originalfileNames.get(i), imageType.get(i));
 			
 			//File 에서 파일 경로는 물리적 경로를 가져와야 한다.
 			String filePath = resourcePath + fileNames.get(i);
 			File file = new File(filePath);
 			
-			try {
-				
+			try {	
 				//이미지 파일을 읽어 BufferedImage 객체로 변환
 				BufferedImage image = ImageIO.read(file);
 				
@@ -141,7 +141,6 @@ public class NationController {
 				//NationImgDto에 가로, 세로 값 세팅
 				imgtmp.setWidth(width);
 				imgtmp.setHeight(height);
-				
 				
 			} catch (IOException e) {
 				System.out.println(file.getAbsolutePath());

@@ -91,13 +91,18 @@
 	            <tbody>
 	            	<c:forEach items="${imageGroup}" var="img">
 		                <tr>
-		                    <td><span class="badge origin">원본</span></td>
+		                	<c:set var="badgeClass" value="" />
+							<c:choose>
+							    <c:when test="${img.imageType == 'ORIGIN'}"><c:set var="badgeClass" value="origin" /></c:when>
+							    <c:when test="${img.imageType == 'CIRCLE'}"><c:set var="badgeClass" value="circle" /></c:when>
+							    <c:when test="${img.imageType == 'SQUARE'}"><c:set var="badgeClass" value="square" /></c:when>
+							</c:choose>
+		                    <td><span class="badge ${badgeClass}">${img.imageType}</span></td>
 		                    <td class="file-name">${img.fileName}</td>
 		                    <td>${img.size} KB</td>
 		                    <td>${img.width} X ${img.hight}</td>
 		                    <td>
 		                    	<a href="/viewNationDown/${img.nationId}/${img.imageId}" class="btn-table-download" onclick="increaseCountDisplay()" download="국기_이미지.png">
-		                    	<!--<button class="btn-table-download">다운로드</button>-->
 		                    	다운로드
 		                    	</a>
 		                    </td>
@@ -111,10 +116,8 @@
 	<script>
 		function increaseCountDisplay() {
 		
-		    const countElement = document.getElementById('downCnt');
-		    
+		    const countElement = document.getElementById('downCnt');	    
 		    let currentCount = parseInt(countElement.innerText) || 0;
-		        
 		    countElement.innerText = currentCount + 1;
 		    
 		}

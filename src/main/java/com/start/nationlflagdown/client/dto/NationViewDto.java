@@ -21,6 +21,8 @@ public class NationViewDto {
 	private int viewCnt;
 	private int downCnt;
 	
+	private List<String> typeList = new ArrayList<>();
+	
 	public NationViewDto() {}
 	
 	public NationViewDto(NationVO nationVo, List<ImageVO> imgList, String lang) {
@@ -43,6 +45,7 @@ public class NationViewDto {
 		this.imgUrls = imgList.stream().map(img -> "/images/" + img.getFileName()).collect(Collectors.toList());
 		this.viewCnt = nationVo.getViewCnt();
 		this.downCnt = nationVo.getDownCnt(); 
+		this.typeList = imgList.stream().map(ImageVO::getImageType).collect(Collectors.toList());
 	}
 	
 	public Long getNationId() {
@@ -107,6 +110,14 @@ public class NationViewDto {
 
 	public int getDownCnt() {
 		return downCnt;
+	}
+
+	public List<String> getTypeList() {
+		return typeList;
+	}
+
+	public void setImageType(List<String> typeList) {
+		this.typeList = typeList;
 	}
 	
 }
