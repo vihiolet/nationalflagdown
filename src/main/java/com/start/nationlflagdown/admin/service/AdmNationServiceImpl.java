@@ -46,24 +46,33 @@ public class AdmNationServiceImpl implements AdmNationService{
 	public Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadFiles) throws IOException {
 		
 		AdmNationVO nation = AdmNationVO.createNation(form);
-		AdmNationVO saveNation = nationRepository.save(nation);
 		
 		File uploadDir = new File(fileDir);
 		if(!uploadDir.exists()) {
 			uploadDir.mkdir();
 		}
 		
-		if(uploadFiles != null && uploadFiles.size() > 0) {
-			for(MultipartFile file : uploadFiles) {
+		if(uploadFiles != null && !uploadFiles.isEmpty()) {
+			for (int i = 0; i < uploadFiles.size(); i++) {
+	            MultipartFile file = uploadFiles.get(i);
+	            
 				if(!file.isEmpty()) {
 					
 					String originalFileName = file.getOriginalFilename();
 					String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
 					
 					//엔티티 생성 후 값 세팅
-					AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);		
+					AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);	
+					
+					if(form.getTypeList() != null && form.getTypeList().size() > i) {
+						String imgType = form.getTypeList().get(i).getImageType();
+						image.setImageType(imgType);
+					}
+					/*
 					image.setNation(saveNation);
 					imageRepository.save(image);	
+					*/
+					nation.addImages(image);
 					
 					try {
 						file.transferTo(new File(fileDir + uniqueFileName));
@@ -73,6 +82,8 @@ public class AdmNationServiceImpl implements AdmNationService{
 				}
 			}
 		}
+		//부모만 저장 (CascadeType.ALL에 의해 이미지들도 한꺼번에 insert됨) cascade 설정이 되어있으므로 나중에 한 번만 해도 
+	    AdmNationVO saveNation = nationRepository.save(nation);
 		return saveNation.getNationId();
 	}
 	

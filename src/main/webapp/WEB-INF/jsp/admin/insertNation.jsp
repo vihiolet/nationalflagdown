@@ -41,7 +41,7 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>국가명</label>
+                        <label>국가명 <span class="required">*</span></label>
                         <input type="text" id="nationNameKo" name="nationNameKo" placeholder="예: 대한민국">
                     </div>
                     <div class="form-group">
@@ -52,19 +52,19 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>수도명</label>
+                        <label>수도명 <span class="required">*</span></label>
                         <input type="text" id="capitarKo" name="capitarKo" placeholder="예: 서울">
                     </div>
                     <div class="form-group">
-                        <label>영문 수도명</label>
+                        <label>영문 수도명 <span class="required">*</span></label>
                         <input type="text" id="capitarEn" name="capitarEn" placeholder="예: Seoul">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>대륙</label>
+                    <label>대륙 <span class="required">*</span></label>
                     <div class="radio-group">
-                        <label class="radio-item"><input type="radio" value="아시아" name="continent"/>아시아</label>
+                        <label class="radio-item"><input type="radio" value="아시아" name="continent" checked/>아시아</label>
                         <label class="radio-item"><input type="radio" value="아프리카" name="continent"/>아프리카</label>
                         <label class="radio-item"><input type="radio" value="유럽" name="continent"/>유럽</label>
                         <label class="radio-item"><input type="radio" value="북아메리카" name="continent"/>북아메리카</label>
@@ -77,13 +77,15 @@
 
                 <div class="form-group">
                     <div class="label-with-btn">
-                        <label>국기 및 국가 이미지</label>
+                        <label>국기 이미지</label>
                         <label for="file-upload" class="btn-outline-sm">
 	        				<span>+ 이미지 등록</span>
 					    </label>
                         <input type="file" id="file-upload" name="uploadFile" accept="image/*" multiple style="display: none;" onchange="handleImageUpload(this)">
                     </div>
-                    <div id="imagePreviewContainer" class="image-preview-grid"></div>
+                    
+		            <div id="imagePreview" class="image-preview-grid"></div>
+                    
                 </div>
 
                 <div class="form-footer">
@@ -95,10 +97,20 @@
     </main>
     <script>
     	let selectedFiles = [];
+    	let i = 0;
     	
     	/* 이미지 미리 보기*/
 		function handleImageUpload(input) {
-		    const $container = $('#imagePreviewContainer'); 
+		
+			const $container = $('#img-container');
+			
+		    const $previewCon = $('#imagePreview'); 
+		    
+		    const typeOption = [
+			    { id: 'original', text: '원본', value: 'ORIGIN' },
+			    { id: 'circle', text: '원형', value: 'CIRCLE' },
+			    { id: 'square', text: '정사각형', value: 'SQUARE' }
+			];
 		
 		    Array.from(input.files).forEach(file => {
 		    
@@ -106,7 +118,32 @@
 		    	
 		        const reader = new FileReader(); 
 		        reader.onload = function(e) {
+		        
+		        	const $container = $('<div/>');
+		        	
+		            const $div = $('<div/>', {class: 'image-type'});
 		            const $card = $('<div/>', { class: 'image-card' });
+		            
+		            typeOption.forEach((opt, index) => {
+		            
+		        		const $radio = $('<input/>', {
+		        			type: 'radio',
+		        			name: 'typeList[' + i + '].imageType',
+		        			id: opt.id,
+		        			value: opt.value,
+		        			checked: index === 0 
+		        		});
+		        		
+		        		const $label = $('<label/>', {
+		        			for: opt.id,
+		        			text: ' ' + opt.text + ' '
+		        		});
+		        		
+		        		$div.append($radio).append($label);
+		        		
+		        	});
+		        	i++;
+		            
 		            const $imgBox = $('<div/>', { class: 'img-box' }).append(
 		                $('<img/>', { src: e.target.result }) //readAsDataURL로 얻은 결과값
 		            );
@@ -117,12 +154,14 @@
 		                    class: 'btn-icon-del',
 		                    html: '<span class="material-symbols-outlined">delete</span>',
 		                    click: function() { 
-		                        $card.fadeOut(200, function() { $(this).remove(); }); 
+		                        $container.fadeOut(200, function() { $(this).remove(); }); 
 		                    }
 		                })
 		            );
+		            
 		            $card.append($imgBox, $imgInfo);
-		            $container.append($card);
+		            $container.append($div, $card);
+		            $previewCon.append($container);
 		        };
 		        reader.readAsDataURL(file);
 		    });
@@ -140,11 +179,15 @@
 			formData.append("capitarEn", $('#capitarEn').val());
 			formData.append("continent", continenValue);
 			
-			console.log("보낼 파일들:", selectedFiles);
-			
 			selectedFiles.forEach(file => {
 				formData.append("uploadFile", file);
 			});
+			
+			$('input[name$=".imageType"]:checked').each(function() {
+				formData.append($(this).attr('name'), $(this).val());
+			});
+			
+			
 			$.ajax({
 				url: '/insertNation',
 				type: 'POST',

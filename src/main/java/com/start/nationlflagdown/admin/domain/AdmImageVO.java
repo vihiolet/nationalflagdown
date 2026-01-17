@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class AdmImageVO {
 	
 	//JPA 요구사항: 기본 생성자 (필수)
-	protected AdmImageVO() {}
+	public AdmImageVO() {}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,7 @@ public class AdmImageVO {
 	private AdmNationVO nation;	//참조할 엔티티 객체를 필드로 사용(엔티티 필드라고 한다)
 	private String fileName;
 	private String originalFileName;
+	private String imageType;
 	
 	/*
 	 * @Column : 필드를 테이블의 컬럼에 매핑시켜주는 어노테이션 옵션으로 unique = true가 있다.
@@ -58,6 +59,14 @@ public class AdmImageVO {
 	
 	public String getOriginalFileName() {
 		return originalFileName;
+	}
+
+	public String getImageType() {
+		return imageType;
+	}
+
+	public void setImageType(String imageType) {
+		this.imageType = imageType;
 	}
 	
 

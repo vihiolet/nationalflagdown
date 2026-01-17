@@ -3,6 +3,7 @@ package com.start.nationlflagdown.admin.dto;
 import com.start.nationlflagdown.admin.domain.AdmImageVO;
 import com.start.nationlflagdown.admin.domain.AdmNationVO;
 
+//List
 public class AdmNationListDto {
 	
 	private Long nationId;
