@@ -118,13 +118,29 @@ public class NationController {
 		List<String> imgUrls = nation.getImgUrls();
 		List<String> originalfileNames = nation.getOriginalFileName();
 		List<String> fileNames = nation.getFileName();
-		List<String> imageType = nation.getTypeList();
+		List<String> imageTypes = nation.getTypeList();
 		
 		List<NationImgDto> imageGroup = new ArrayList<>();
 		
 		for(int i = 0; i < imageIds.size(); i++) {
 			
-			NationImgDto imgtmp = new NationImgDto(nationId, imageIds.get(i), imgUrls.get(i), originalfileNames.get(i), imageType.get(i));
+			String imageType = "";
+			
+			if(lang.equals("ko") || lang.isEmpty()) {
+				switch(imageTypes.get(i)) {
+				case "ORIGIN":
+					imageType = "원본";
+					break;
+				case "CIRCLE":
+					imageType = "원형";
+					break;
+				case "SQUARE":
+					imageType = "사각형";
+					break;
+				}
+			}
+			
+			NationImgDto imgtmp = new NationImgDto(nationId, imageIds.get(i), imgUrls.get(i), originalfileNames.get(i), imageType);
 			
 			//File 에서 파일 경로는 물리적 경로를 가져와야 한다.
 			String filePath = resourcePath + fileNames.get(i);

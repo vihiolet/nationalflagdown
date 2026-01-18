@@ -18,7 +18,7 @@
 	<header>
 	    <div class="header-container">
 	    	<c:set var="currentLang" value="${empty param.lang ? 'ko' : param.lang}" />
-	        <a href="nation"><h1 class="logo">LOGO</h1></a>
+	        <a href="nation?lang=${currentLang}"><h1 class="logo">LOGO</h1></a>
 	        <div class="lang-selector">
 	            <a href ="viewNation?nationId=${param.nationId}&lang=ko" class="lang-btn ${empty param.lang || param.lang eq 'ko' ? 'active' : ''}">
 	            	<spring:message code="message.language.ko"/>
@@ -93,9 +93,9 @@
 		                <tr>
 		                	<c:set var="badgeClass" value="" />
 							<c:choose>
-							    <c:when test="${img.imageType == 'ORIGIN'}"><c:set var="badgeClass" value="origin" /></c:when>
-							    <c:when test="${img.imageType == 'CIRCLE'}"><c:set var="badgeClass" value="circle" /></c:when>
-							    <c:when test="${img.imageType == 'SQUARE'}"><c:set var="badgeClass" value="square" /></c:when>
+							    <c:when test="${img.imageType eq 'ORIGIN' or img.imageType eq'원본'}"><c:set var="badgeClass" value="origin"/></c:when>
+							    <c:when test="${img.imageType == 'CIRCLE' or img.imageType == '원형'}"><c:set var="badgeClass" value="circle" /></c:when>
+							    <c:when test="${img.imageType == 'SQUARE' or img.imageType == '사각형'}"><c:set var="badgeClass" value="square" /></c:when>
 							</c:choose>
 		                    <td><span class="badge ${badgeClass}">${img.imageType}</span></td>
 		                    <td class="file-name">${img.fileName}</td>

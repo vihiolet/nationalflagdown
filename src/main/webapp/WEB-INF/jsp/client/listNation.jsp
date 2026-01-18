@@ -22,7 +22,7 @@
 <header>
     <div class="header-container">
     	<c:set var="currentLang" value="${empty param.lang ? 'ko' : param.lang}" />
-        <a href="nation"><h1 class="logo">LOGO</h1></a>
+        <a href="nation?lang=${currentLang}"><h1 class="logo">LOGO</h1></a>
         <div class="lang-selector">
             <a href ="nation?lang=ko" class="lang-btn ${empty param.lang || param.lang eq 'ko' ? 'active' : ''}">
             	<spring:message code="message.language.ko"/>
