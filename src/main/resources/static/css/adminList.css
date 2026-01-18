@@ -307,7 +307,11 @@ body {
 #imagePreviewContainer:empty {
     display: none;
 }
-
+.image-type {
+	margin-bottom: 5px;
+	display: flex;
+	gap: 20px;
+}
 .image-card {
     border: 1px solid var(--border-color);
     border-radius: 8px;

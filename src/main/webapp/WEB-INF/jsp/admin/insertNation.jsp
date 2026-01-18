@@ -125,7 +125,9 @@
 		            const $card = $('<div/>', { class: 'image-card' });
 		            
 		            typeOption.forEach((opt, index) => {
-		            
+		        		
+		        		const $label = $('<label/>', {class: 'radio-item' });
+		        		
 		        		const $radio = $('<input/>', {
 		        			type: 'radio',
 		        			name: 'typeList[' + i + '].imageType',
@@ -134,12 +136,8 @@
 		        			checked: index === 0 
 		        		});
 		        		
-		        		const $label = $('<label/>', {
-		        			for: opt.id,
-		        			text: ' ' + opt.text + ' '
-		        		});
-		        		
-		        		$div.append($radio).append($label);
+		        		$label.append($radio, ' ' + opt.text + ' ');
+		        		$div.append($label);
 		        		
 		        	});
 		        	i++;
