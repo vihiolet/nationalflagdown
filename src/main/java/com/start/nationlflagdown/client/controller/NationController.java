@@ -138,7 +138,10 @@ public class NationController {
 					imageType = "사각형";
 					break;
 				}
+			}else {
+				imageType = imageTypes.get(i);
 			}
+			
 			
 			NationImgDto imgtmp = new NationImgDto(nationId, imageIds.get(i), imgUrls.get(i), originalfileNames.get(i), imageType);
 			
