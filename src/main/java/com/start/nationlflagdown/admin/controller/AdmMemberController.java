@@ -30,7 +30,7 @@ public class AdmMemberController {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginMember", loginRequest.getId());
 			
-			return ResponseEntity.ok("로그인 성공!");
+			return ResponseEntity.ok("/adminNation");
 		}else {
 			return ResponseEntity.status(401).body("아이디 또는 비밀번호가 틀렸습니다.");
 		}

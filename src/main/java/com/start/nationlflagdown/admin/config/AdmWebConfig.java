@@ -2,8 +2,11 @@ package com.start.nationlflagdown.admin.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.start.nationlflagdown.admin.interceptor.LoginCheckInterceptor;
 
 @Configuration
 public class AdmWebConfig implements WebMvcConfigurer{
@@ -22,6 +25,14 @@ public class AdmWebConfig implements WebMvcConfigurer{
 		
 		registry.addResourceHandler(handler)
 		.addResourceLocations(loation);
+	}
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new LoginCheckInterceptor())
+		.order(1)
+		.addPathPatterns("/**")
+		.excludePathPatterns("/", "/login", "/css/**", "/*.ico", "/error");
 	}
 
 }
