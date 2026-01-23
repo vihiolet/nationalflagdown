@@ -119,8 +119,9 @@ public class AdmNationServiceImpl implements AdmNationService{
 	                String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
 					
 					AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
-					image.setNation(nation);
-					imageRepository.save(image);
+					//image.setNation(nation);
+					//imageRepository.save(image);
+					nation.addImages(image);
 					
 					try {
 						file.transferTo(new File(fileDir + uniqueFileName));
@@ -202,7 +203,8 @@ public class AdmNationServiceImpl implements AdmNationService{
 		return nations.map(admNationVo -> {
 			//N+1 이슈 제거
 			//List<AdmImageVO> imgList = imageRepository.findByNationNationId(admNationVo.getNationId());
-			AdmImageVO firstImgVo = admNationVo.getImages().stream().findFirst().orElse(null); 
+			//AdmImageVO firstImgVo = imgList.stream().findFirst().orElse(null);
+			AdmImageVO firstImgVo = admNationVo.getImages().stream().findFirst().orElse(null);
 			return new AdmNationListDto(admNationVo, firstImgVo);
 		});		
 	}
