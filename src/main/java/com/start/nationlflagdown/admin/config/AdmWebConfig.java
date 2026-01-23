@@ -32,7 +32,7 @@ public class AdmWebConfig implements WebMvcConfigurer{
 		registry.addInterceptor(new LoginCheckInterceptor())
 		.order(1)
 		.addPathPatterns("/**")
-		.excludePathPatterns("/", "/login", "/css/**", "/*.ico", "/error");
+		.excludePathPatterns("/", "/login", "/css/**", "/*.ico", "/error", "/nation", "/viewNation", "/images/**");
 	}
 
 }
