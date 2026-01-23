@@ -11,9 +11,11 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 @EntityListeners(AuditingEntityListener.class)
 
 @Entity
+@Table(name = "member")
 public class AdmMemberVO {
 	
 	@Id
