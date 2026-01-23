@@ -121,7 +121,8 @@ public class NationServiceImpl implements NationService{
 		}
 		//Page 객체는 stream()의 기능을 자체적으로 내장
 		return nations.map(nationVo -> {
-			ImageVO firstImgVo = nationVo.getImages().stream().findFirst().orElse(null);
+			List<ImageVO> imgList = imageRepository.findByNationNationId(nationVo.getNationId());
+			ImageVO firstImgVo = imgList.stream().findFirst().orElse(null);
 			return new NationDto(nationVo, firstImgVo, lang);
 		});
 		
