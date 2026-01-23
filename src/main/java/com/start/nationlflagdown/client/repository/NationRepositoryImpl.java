@@ -7,6 +7,7 @@ import java.util.List;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.start.nationlflagdown.client.domain.NationVO;
+import com.start.nationlflagdown.client.domain.QImageVO;
 import com.start.nationlflagdown.client.dto.NationSearchCond;
 
 import jakarta.persistence.EntityManager;
@@ -33,8 +34,11 @@ public class NationRepositoryImpl implements NationRepositoryCustom{
 	@Override
 	public Page<NationVO> search(NationSearchCond cond, Pageable pageable){
 		
+		QImageVO image = QImageVO.imageVO;
+		
 		List<NationVO> content = queryFactory
 				.selectFrom(nationVO)
+				.leftJoin(nationVO.images, image).fetchJoin()
 				.where(searchCond(cond.getSearch()))
 				.orderBy(nationVO.nationCode.asc())
 				.offset(pageable.getOffset())

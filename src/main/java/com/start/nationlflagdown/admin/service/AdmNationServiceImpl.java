@@ -200,8 +200,9 @@ public class AdmNationServiceImpl implements AdmNationService{
 		nations = nationRepository.search(cond, pageable);
 		
 		return nations.map(admNationVo -> {
-			List<AdmImageVO> imgList = imageRepository.findByNationNationId(admNationVo.getNationId());
-			AdmImageVO firstImgVo = imgList.stream().findFirst().orElse(null); 
+			//N+1 이슈 제거
+			//List<AdmImageVO> imgList = imageRepository.findByNationNationId(admNationVo.getNationId());
+			AdmImageVO firstImgVo = admNationVo.getImages().stream().findFirst().orElse(null); 
 			return new AdmNationListDto(admNationVo, firstImgVo);
 		});		
 	}
