@@ -27,7 +27,7 @@
     
     <main class="content-container">
         <section class="content-title-area">
-            <h2 class="content-title">국가 정보 등록</h2>
+            <h2 class="content-title">국가 정보 수</h2>
         </section>
 
         <div class="form-wrapper">

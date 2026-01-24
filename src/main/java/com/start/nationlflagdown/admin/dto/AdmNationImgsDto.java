@@ -49,9 +49,12 @@ public class AdmNationImgsDto {
 		this.capitarKo = nationVo.getCapitarKo();
 		this.capitarEn = nationVo.getCapitarEn();
 		this.continent = nationVo.getContinent();
-		this.setImageIds(imgList.stream().map(AdmImageVO::getImageId).collect(Collectors.toList()));
-		this.setFileName(imgList.stream().map(AdmImageVO::getFileName).collect(Collectors.toList()));
-		this.setOriginalFileName(imgList.stream().map(AdmImageVO::getOriginalFileName).collect(Collectors.toList()));
+		//this.setImageIds(imgList.stream().map(AdmImageVO::getImageId).collect(Collectors.toList()));
+		//this.setFileName(imgList.stream().map(AdmImageVO::getFileName).collect(Collectors.toList()));
+		//this.setOriginalFileName(imgList.stream().map(AdmImageVO::getOriginalFileName).collect(Collectors.toList()));
+		this.imageIds = imgList.stream().map(AdmImageVO::getImageId).collect(Collectors.toList());
+		this.fileName = imgList.stream().map(AdmImageVO::getFileName).collect(Collectors.toList());
+		this.originalFileName = imgList.stream().map(AdmImageVO::getOriginalFileName).collect(Collectors.toList());
 		this.imgUrls = imgList.stream().map(img -> "/images/" + img.getFileName()).collect(Collectors.toList());
 		this.imgUrl = "/images/" + this.getFileName();
 		this.typeList = typeList.stream().map(img -> {

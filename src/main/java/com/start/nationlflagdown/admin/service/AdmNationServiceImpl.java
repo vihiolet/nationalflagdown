@@ -24,7 +24,7 @@ import com.start.nationlflagdown.admin.dto.AdmSearchCond;
 import com.start.nationlflagdown.admin.repository.AdmNationRepository;
 import com.start.nationlflagdown.admin.repository.AdmimageRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("admNationService")
 @Transactional
@@ -88,6 +88,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	//글 수정 form
 	public AdmNationImgsDto updateNationForm(Long nationId) {
 		
@@ -193,6 +194,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 	//글 목록
 	//위 selectNation() 메서드에서 페이징 기능 추가
 	@Override
+	@Transactional(readOnly = true)
 	public Page<AdmNationListDto> nationList(AdmSearchCond cond, int page){
 		
 		Pageable pageable = PageRequest.of(page - 1, 5);
