@@ -31,7 +31,7 @@ public class AdmNationRepositoryImpl implements AdmRepositoryCustom{
 		
 		List<AdmNationVO> content = queryFactory
 				.selectFrom(admNationVO)
-				.leftJoin(admNationVO.images, image).fetchJoin()
+				//.leftJoin(admNationVO.images, image).fetchJoin()
 				.where(searchCond(cond.getSearch()))
 				.orderBy(admNationVO.regDate.desc())
 				.offset(pageable.getOffset())
