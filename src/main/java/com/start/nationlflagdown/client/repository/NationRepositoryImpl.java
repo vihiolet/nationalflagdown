@@ -23,8 +23,6 @@ public class NationRepositoryImpl implements NationRepositoryCustom{
 	public NationRepositoryImpl(EntityManager em) {
 		this.queryFactory = new JPAQueryFactory(em);
 	}
-	
-	QImageVO image = QImageVO.imageVO;
 
 //	@Override
 //	public List<NationVO> search(NationSearchCond cond) {
@@ -38,7 +36,6 @@ public class NationRepositoryImpl implements NationRepositoryCustom{
 		
 		List<NationVO> content = queryFactory
 				.selectFrom(nationVO)
-				.leftJoin(nationVO.images, image).fetchJoin()
 				.where(searchCond(cond.getSearch()))
 				.orderBy(nationVO.nationCode.asc())
 				.offset(pageable.getOffset())
@@ -59,7 +56,6 @@ public class NationRepositoryImpl implements NationRepositoryCustom{
 		
 		List<NationVO> content = queryFactory
 				.selectFrom(nationVO)
-				.leftJoin(nationVO.images, image).fetchJoin()
 				.where(selectContinent(cond.getContinent()))
 				.orderBy(nationVO.capitarEn.asc())
 				.offset(pageable.getOffset())
