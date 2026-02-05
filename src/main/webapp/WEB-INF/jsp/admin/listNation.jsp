@@ -20,13 +20,15 @@
 </head>
 <body>
     <header class="main-header">
-        <div class="header-left">
-            <h1 class="logo">Logo</h1>
+        <div class="header-left logo-link">
+            <img src="/images/logo.png" alt="Logo">
         </div>
+        <!--
         <nav class="header-center">
             <a href="#" class="nav-item active">국가 목록</a>
             <a href="#" class="nav-item">관리자 목록</a>
         </nav>
+        -->
         <div class="header-right">
             <div class="profile-circle"></div>
         </div>

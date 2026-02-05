@@ -29,7 +29,14 @@ body {
     border-bottom: 1px solid var(--border-color);
 }
 
-.logo { font-size: 20px; font-weight: 800; color: var(--primary-color); }
+.logo-link {
+    width: 120px;
+}
+
+.logo-link img{
+	width: 100%;
+    display: block;
+}
 
 .header-center { display: flex; gap: 30px; }
 .nav-item { 

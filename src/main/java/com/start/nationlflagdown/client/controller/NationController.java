@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.start.nationlflagdown.client.dto.NationDto;
 import com.start.nationlflagdown.client.dto.NationViewDto;
@@ -35,8 +36,9 @@ public class NationController {
 	@Autowired
 	private NationService nationService;
 	
+	//업로드 이미지 폴더 경로
 	@Value("${file.upload.dir}")
-    private String resourcePath;
+    private String uploadePath;
 	
 	//목록
 	@GetMapping("/nation")
@@ -146,7 +148,7 @@ public class NationController {
 			NationImgDto imgtmp = new NationImgDto(nationId, imageIds.get(i), imgUrls.get(i), originalfileNames.get(i), imageType);
 			
 			//File 에서 파일 경로는 물리적 경로를 가져와야 한다.
-			String filePath = resourcePath + fileNames.get(i);
+			String filePath = uploadePath + fileNames.get(i);
 			File file = new File(filePath);
 			
 			try {	

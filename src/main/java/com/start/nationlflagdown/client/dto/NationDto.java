@@ -34,7 +34,7 @@ public class NationDto {
 		this.downCnt = nationVo.getDownCnt();
 		this.viewCnt = nationVo.getViewCnt();
 		this.fileName = imgVo.getFileName();
-		this.imgUrl = "/images/" + imgVo.getFileName();
+		this.imgUrl = "/upload/" + imgVo.getFileName();
 	};
 	
 	public Long getNationId() {

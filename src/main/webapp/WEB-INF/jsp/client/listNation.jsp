@@ -22,7 +22,9 @@
 <header>
     <div class="header-container">
     	<c:set var="currentLang" value="${empty param.lang ? 'ko' : param.lang}" />
-        <a href="nation?lang=${currentLang}"><h1 class="logo">LOGO</h1></a>
+        <a href="nation?lang=${currentLang}" class="logo-link">
+        	<img src="/images/logo.png" alt="Logo">
+        </a>
         <div class="lang-selector">
             <a href ="nation?lang=ko" class="lang-btn ${empty param.lang || param.lang eq 'ko' ? 'active' : ''}">
             	<spring:message code="message.language.ko"/>
@@ -76,7 +78,7 @@
        <c:forEach items="${nationList.content}" var="nation">
             <div class="country-card">
                 <div class="flag-img">
-                	<a href="viewNation?nationId=${nation.nationId}&lang=${currentLang}"><img src="${nation.imgUrl}"</img></a>
+                	<a href="viewNation?nationId=${nation.nationId}&lang=${currentLang}"><img src="${nation.imgUrl}"</a>
                 </div>
                 <div class="info">
                     <a href="viewNation?nationId=${nation.nationId}&lang=${currentLang}">${nation.nationName}</a>

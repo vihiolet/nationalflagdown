@@ -55,8 +55,8 @@ public class AdmNationImgsDto {
 		this.imageIds = imgList.stream().map(AdmImageVO::getImageId).collect(Collectors.toList());
 		this.fileName = imgList.stream().map(AdmImageVO::getFileName).collect(Collectors.toList());
 		this.originalFileName = imgList.stream().map(AdmImageVO::getOriginalFileName).collect(Collectors.toList());
-		this.imgUrls = imgList.stream().map(img -> "/images/" + img.getFileName()).collect(Collectors.toList());
-		this.imgUrl = "/images/" + this.getFileName();
+		this.imgUrls = imgList.stream().map(img -> "/upload/" + img.getFileName()).collect(Collectors.toList());
+		this.imgUrl = "/upload/" + this.getFileName();
 		this.typeList = typeList.stream().map(img -> {
 			ImageTypeDTO dto = new ImageTypeDTO();
 			dto.setImageType(img.getImageType()); 

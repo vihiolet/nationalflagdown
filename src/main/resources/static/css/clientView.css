@@ -29,10 +29,14 @@ header, .footer-content {
     padding: 10px 0;
 }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: -1px;
+.logo-link {
+    display: inline-block;
+    width: 120px;
+}
+
+.logo-link img{
+	width: 100%;
+    display: block;
 }
 
 /* 언어 선택기 스타일 */

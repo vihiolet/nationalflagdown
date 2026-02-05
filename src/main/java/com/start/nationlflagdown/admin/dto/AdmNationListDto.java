@@ -29,7 +29,7 @@ public class AdmNationListDto {
 		this.continent = nationVo.getContinent();
 		this.fileName = imgVo.getFileName();
 		this.originalFileName = imgVo.getOriginalFileName();
-		this.imgUrl = "/images/" + imgVo.getFileName();
+		this.imgUrl = "/upload/" + imgVo.getFileName();
 	}
 	
 	public Long getNationId() {

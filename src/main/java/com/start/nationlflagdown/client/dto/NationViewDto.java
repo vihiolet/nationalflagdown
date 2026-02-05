@@ -42,7 +42,7 @@ public class NationViewDto {
 		this.imageIds = imgList.stream().map(ImageVO::getImageId).collect(Collectors.toList());
 		this.fileName = imgList.stream().map(ImageVO::getFileName).collect(Collectors.toList());
 		this.originalFileName = imgList.stream().map(ImageVO::getOriginalFileName).collect(Collectors.toList());
-		this.imgUrls = imgList.stream().map(img -> "/images/" + img.getFileName()).collect(Collectors.toList());
+		this.imgUrls = imgList.stream().map(img -> "/upload/" + img.getFileName()).collect(Collectors.toList());
 		this.viewCnt = nationVo.getViewCnt();
 		this.downCnt = nationVo.getDownCnt(); 
 		this.typeList = imgList.stream().map(ImageVO::getImageType).collect(Collectors.toList());

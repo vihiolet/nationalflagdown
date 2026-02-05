@@ -11,6 +11,7 @@
 	<groupId>com.start</groupId>
 	<artifactId>nationlflagdown</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>nationlflagdown</name>
 	<description>National flag download</description>
 	<url/>

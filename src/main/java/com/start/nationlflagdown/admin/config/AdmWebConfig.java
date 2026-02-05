@@ -11,20 +11,26 @@ import com.start.nationlflagdown.admin.interceptor.LoginCheckInterceptor;
 @Configuration
 public class AdmWebConfig implements WebMvcConfigurer{
 	
+	//업로드 이미지 폴더 경로
 	@Value("${file.upload.dir}")
-    private String resourcePath;
+    private String uploadePath;
+	
+	//리소스 폴더(logo) 경로
+	@Value("${file.images.dir}")
+	private String resourcePath;
 	
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		
 		//요청 url 패턴 지정(가상 경로)
-		String handler = "/images/**"; 
-		
+		String handler = "/upload/**"; 		
 		//물리적 위치 지정(실제 경로)
-		String loation = "file:///" + resourcePath;
-		
+		String loation = "file:///" + uploadePath;
 		registry.addResourceHandler(handler)
-		.addResourceLocations(loation);
+		.addResourceLocations(loation); 
+				
+		registry.addResourceHandler("/images/**")
+		.addResourceLocations("file:///" + resourcePath);
 	}
 	
 	@Override
