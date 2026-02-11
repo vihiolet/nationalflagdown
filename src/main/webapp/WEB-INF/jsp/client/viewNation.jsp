@@ -18,8 +18,9 @@
 	<header>
 	    <div class="header-container">
 	    	<c:set var="currentLang" value="${empty param.lang ? 'ko' : param.lang}" />
+	    	
 	        <a href="nation?lang=${currentLang}" class="logo-link">
-	        	<img src="/images/logo.png" alt="Logo">
+	        	<!--<img src="/images/logo.png" alt="Logo">-->
 	        </a>
 	        <div class="lang-selector">
 	            <a href ="viewNation?nationId=${param.nationId}&lang=ko" class="lang-btn ${empty param.lang || param.lang eq 'ko' ? 'active' : ''}">

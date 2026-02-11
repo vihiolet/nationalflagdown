@@ -16,19 +16,20 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
+<!--
     <header class="main-header">
         <div class="header-left logo-link">
         	<img src="/images/logo.png" alt="Logo">
         </div>
-        <!--
+        
         <nav class="header-center">
             <a href="/adminNation" class="nav-item active">국가 목록</a>
             <a href="#" class="nav-item">관리자 목록</a>
         </nav>
-        -->
+        
         <div class="header-right"><div class="profile-circle"></div></div>
     </header>
-    
+    -->
     <main class="content-container">
         <section class="content-title-area">
             <h2 class="content-title">국가 정보 수</h2>
