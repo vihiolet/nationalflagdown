@@ -197,7 +197,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 	@Transactional(readOnly = true)
 	public Page<AdmNationListDto> nationList(AdmSearchCond cond, int page){
 		
-		Pageable pageable = PageRequest.of(page - 1, 5);
+		Pageable pageable = PageRequest.of(page - 1, 15);
 		
 		Page<AdmNationVO> nations;
 		nations = nationRepository.search(cond, pageable);

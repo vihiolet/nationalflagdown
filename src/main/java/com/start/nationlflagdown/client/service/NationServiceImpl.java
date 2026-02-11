@@ -110,7 +110,7 @@ public class NationServiceImpl implements NationService{
 	@Override
 	public Page<NationDto> NationList(NationSearchCond cond, String lang, int page){
 		
-		Pageable pageable = PageRequest.of(page - 1, 8);
+		Pageable pageable = PageRequest.of(page - 1, 12);
 			
 		Page<NationVO> nations;
 		
