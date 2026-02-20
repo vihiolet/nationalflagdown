@@ -13,6 +13,91 @@
 * **Database**: MySQL
 * **Note**: 본 프로젝트는 가독성과 명확한 제어를 위해 **Lombok을 사용하지 않고** 개발되었습니다.
 
+## 프로젝트 구조
+```
+PICKFLAG
+├── src/main/java
+│   └── com
+│       ├── admin                             
+│       │   ├── config          
+│       │   │   ├── AdmSecurityConfige.java
+│       │   │   └── AdmWebConfige.java
+│       │   ├── controller
+│       │   │   ├── AdmMemberController.java
+│       │   │   └── AdmNationController.java
+│       │   ├── domain                       
+│       │   │   ├── AdmImageVO.java
+│       │   │   ├── AdmMemberVO.java
+│       │   │   └── AdmNationVO.java
+│       │   ├── dto                           
+│       │   │   ├── AdmLoginRequestDto.java
+│       │   │   ├── AdmNationImgsDto.java
+│       │   │   ├── AdmNationListDto.java
+│       │   │   └── AdmSearchCond.java
+│       │   ├── interceptor
+│       │   │   └── LoginCheckInterceptor.java
+│       │   ├── repository
+│       │   │   ├── AdmImageRepository.java
+│       │   │   ├── AdmMemberRepository.java
+│       │   │   ├── AdmNationRepository.java
+│       │   │   ├── AdmNationRepositoryImpl.java
+│       │   │   └── AdmRepositoryCustom.java
+│       │   └── service
+│       │       ├── AdmMemberService.java
+│       │       ├── AdmMemberServiceImpl.java
+│       │       ├── AdmNationServie.java
+│       │       └── AdmNatonServiceImpl.java
+│       └── client          
+│           ├── config
+│           │   ├── MessageConfige.java
+│           │   └── WebConfige.java
+│           ├── controller
+│           │   └── NationController.java
+│           ├── domain
+│           │   ├── AdmNaionVO.java
+│           │   └── AdmNationVO.java
+│           ├── dto
+│           │   ├── NationDto.java
+│           │   ├── NationImgsDto.java
+│           │   ├── NationSearchCond.java
+│           │   └── NationViewDto.java
+│           ├── repository
+│           │   ├── ImageRepository.java
+│           │   ├── NationRepository.java
+│           │   ├── NationRepositoryCustom.java
+│           │   └── NationRepositoryImpl.java
+│           ├── service
+│           │   ├── NationServie.java
+│           │   └── NatonServiceImpl.java
+│           └── common
+│               └── GlobalExceptionHandler.java
+├── src/main/resources
+│   ├── message
+│   │   ├── messages_en.properties
+│   │   └── messages_ko.properties 
+│   ├── static
+│   │   └── css
+│   │       ├── adminList.css
+│   │       ├── clientList.css
+│   │       └── clientView.css
+│   └── application.properties
+└── src
+    └── main
+        └── webapp
+            └── WEB-INF
+                └── jsp
+                    ├── admin
+                    │   ├── inertNation.jsp
+                    │   ├── listNation.jsp 
+                    │   ├── login.jsp
+                    │   └── updateNation.jsp
+                    ├── client
+                    │   ├── listNation.jsp
+                    │   └── viewNation.jsp
+                    └── error
+                        └── error.jsp
+```
+
 ## 주요 기능
 ### 사용자
 - **목록 조회**: 조건별 검색 및 필터링 기능
