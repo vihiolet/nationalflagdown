@@ -20,7 +20,7 @@
 	    	<c:set var="currentLang" value="${empty param.lang ? 'ko' : param.lang}" />
 	    	
 	        <a href="nation?lang=${currentLang}" class="logo-link">
-	        	<!--<img src="/images/logo.png" alt="Logo">-->
+	        	<img src="/images/view_logo.png" alt="Logo">
 	        </a>
 	        <div class="lang-selector">
 	            <a href ="viewNation?nationId=${param.nationId}&lang=ko" class="lang-btn ${empty param.lang || param.lang eq 'ko' ? 'active' : ''}">
@@ -115,6 +115,14 @@
 	        </table>
 	    </div>
 	</div>
+	<footer>
+	    <div class="footer-content">
+	    	<a href="nation?lang=ko" class="logo-link">
+	        	<img src="/images/footer_logo.png" alt="Logo">
+	        </a>
+	        <p>© 2026 Shin Yun Jin. All rights reserved.</p>
+	    </div>
+	</footer>
 
 	<script>
 		function increaseCountDisplay() {

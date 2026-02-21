@@ -24,7 +24,7 @@
     	<c:set var="currentLang" value="${empty param.lang ? 'ko' : param.lang}" />
         
         <a href="nation?lang=${currentLang}" class="logo-link">
-        	<!--<img src="/images/logo.png" alt="Logo">-->
+        	<img src="/images/logo.png" alt="Logo">
         </a>
         <div class="lang-selector">
             <a href ="nation?lang=ko" class="lang-btn ${empty param.lang || param.lang eq 'ko' ? 'active' : ''}">
@@ -135,8 +135,10 @@
 
 <footer>
     <div class="footer-content">
-        <h2 class="logo">LOGO</h2>
-        <p>Copyright © 2025 Country Search. All rights reserved.</p>
+    	<a href="nation?lang=ko" class="logo-link">
+        	<img src="/images/footer_logo.png" alt="Logo">
+        </a>
+        <p>© 2026 Shin Yun Jin. All rights reserved.</p>
     </div>
 </footer>
 
