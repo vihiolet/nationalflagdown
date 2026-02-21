@@ -1,6 +1,7 @@
 package com.start.nationlflagdown.admin.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.io.File;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.start.nationlflagdown.admin.domain.AdmImageVO;
 import com.start.nationlflagdown.admin.domain.AdmNationVO;
 import com.start.nationlflagdown.admin.dto.AdmNationImgsDto;
+import com.start.nationlflagdown.admin.dto.AdmNationImgsDto.ImageTypeDTO;
 import com.start.nationlflagdown.admin.dto.AdmNationListDto;
 import com.start.nationlflagdown.admin.dto.AdmSearchCond;
 import com.start.nationlflagdown.admin.repository.AdmNationRepository;
@@ -52,36 +54,33 @@ public class AdmNationServiceImpl implements AdmNationService{
 			uploadDir.mkdir();
 		}
 		
-		if(uploadFiles != null && !uploadFiles.isEmpty()) {
-			for (int i = 0; i < uploadFiles.size(); i++) {
-	            MultipartFile file = uploadFiles.get(i);
-	            
-				if(!file.isEmpty()) {
-					
-					String originalFileName = file.getOriginalFilename();
-					String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-					
-					//엔티티 생성 후 값 세팅
-					AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);	
-					
-					if(form.getTypeList() != null && form.getTypeList().size() > i) {
-						String imgType = form.getTypeList().get(i).getImageType();
-						image.setImageType(imgType);
-					}
-					/*
-					image.setNation(saveNation);
-					imageRepository.save(image);	
-					*/
-					nation.addImages(image);
-					
-					try {
-						file.transferTo(new File(fileDir + uniqueFileName));
-					}catch(IOException e){
-						throw new IOException("파일 저장 실패: " + e.getMessage(), e);
-					}	
+		int fileIdx = 0;
+		List<String> sortedKeys = form.getTypeList().keySet().stream()
+				.sorted()
+				.toList();
+		
+		for(String key : sortedKeys) {
+			MultipartFile file = uploadFiles.get(fileIdx++);
+			
+			if(!file.isEmpty()) {
+				String originalFileName = file.getOriginalFilename();
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+				
+				AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
+				
+				String imageType = form.getTypeList().get(key).getImageType();
+				image.setImageType(imageType);
+				
+				nation.addImages(image);
+				
+				try {
+					file.transferTo(new File(fileDir + uniqueFileName));
+				}catch(IOException e){
+					throw new IOException("파일 저장 실패: " + e.getMessage(), e);
 				}
 			}
 		}
+		
 		//부모만 저장 (CascadeType.ALL에 의해 이미지들도 한꺼번에 insert됨) cascade 설정이 되어있으므로 나중에 한 번만 해도 
 	    AdmNationVO saveNation = nationRepository.save(nation);
 		return saveNation.getNationId();
@@ -102,7 +101,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 	
 	//글 수정 기능
 	@Override
-	public void updateNation(Long nationId, AdmNationImgsDto form, List<MultipartFile> uploadFile) throws IOException {
+	public void updateNation(Long nationId, AdmNationImgsDto form, List<MultipartFile> uploadFiles) throws IOException {
 		
 		//id로 엔티티를 검색(영속 상태로 가져옴)
 		AdmNationVO nation = nationRepository.findById(nationId)
@@ -110,26 +109,45 @@ public class AdmNationServiceImpl implements AdmNationService{
 		//findById(Long Id)는 Optional<T> 타입으로 반환하는데 nation은 AdmNationVO 타입이 orElseThrow()를 사용하여 객체 추출
 		
 		//영속 상태이므로 save() 메서드 불필요
-		nation.updateNation(form);			
+		nation.updateNation(form);		
 		
-		if(uploadFile != null && uploadFile.size() > 0) {
-			for(MultipartFile file : uploadFile) {
-				if(!file.isEmpty()) {
-					
-					String originalFileName = file.getOriginalFilename();
-	                String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-					
-					AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
-					//image.setNation(nation);
-					//imageRepository.save(image);
-					nation.addImages(image);
-					
-					try {
-						file.transferTo(new File(fileDir + uniqueFileName));
-					}catch(IOException e){
-						throw new IOException("파일 저장 실패: " + e.getMessage(), e);
-					}		
-				}				
+		if (nation.getImages() != null && form.getTypeList() != null) {
+	        for (AdmImageVO image : nation.getImages()) {
+	            String key = String.valueOf(image.getImageId());
+	            
+	            if (form.getTypeList().containsKey(key)) {
+	                ImageTypeDTO typeDto = form.getTypeList().get(key);
+	                // 영속 상태인 엔티티의 값을 변경
+	                image.setImageType(typeDto.getImageType());
+	            }
+	        }
+	    }
+		
+		int fileIdx = 0;
+		List<String> sortedKeys = form.getTypeList().keySet().stream()
+				.filter(k -> k.startsWith("new_"))
+				.sorted()
+				.toList();
+		
+		for(String key : sortedKeys) {
+			MultipartFile file = uploadFiles.get(fileIdx++);
+			
+			if(!file.isEmpty()) {
+				String originalFileName = file.getOriginalFilename();
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+				
+				AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
+				
+				String imageType = form.getTypeList().get(key).getImageType();
+				image.setImageType(imageType);
+				
+				nation.addImages(image);
+				
+				try {
+					file.transferTo(new File(fileDir + uniqueFileName));
+				}catch(IOException e){
+					throw new IOException("파일 저장 실패: " + e.getMessage(), e);
+				}
 			}
 		}
 		
@@ -197,7 +215,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 	@Transactional(readOnly = true)
 	public Page<AdmNationListDto> nationList(AdmSearchCond cond, int page){
 		
-		Pageable pageable = PageRequest.of(page - 1, 15);
+		Pageable pageable = PageRequest.of(page - 1, 10);
 		
 		Page<AdmNationVO> nations;
 		nations = nationRepository.search(cond, pageable);
