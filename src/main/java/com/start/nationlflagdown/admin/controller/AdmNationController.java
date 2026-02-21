@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.start.nationlflagdown.admin.dto.AdmNationImgsDto;
+import com.start.nationlflagdown.admin.dto.AdmNationImgsDto.ImageTypeDTO;
 import com.start.nationlflagdown.admin.dto.AdmNationListDto;
 import com.start.nationlflagdown.admin.dto.AdmSearchCond;
 import com.start.nationlflagdown.admin.service.AdmNationService;
@@ -18,6 +19,7 @@ import com.start.nationlflagdown.admin.service.AdmNationService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,12 +87,18 @@ public class AdmNationController {
 		List<Long> imageIds = nation.getImageIds();
 		List<String> imgUrls = nation.getImgUrls();
 		List<String> originalFileName = nation.getOriginalFileName();
+		//List<ImageTypeDTO> typeList = nation.getTypeList();
+		// List를 Map으로 변환 (Key: imageId, Value: dto)
+		Map<String, ImageTypeDTO> typeList = nation.getTypeList();
 		
 		List<AdmNationImgsDto> imageGroup = new ArrayList<>();
 		
 		for(int i=0; i < imageIds.size(); i++) {
 			
-			AdmNationImgsDto imgtmp = new AdmNationImgsDto(imageIds.get(i), imgUrls.get(i), originalFileName.get(i));
+			ImageTypeDTO typeDto = new ImageTypeDTO();
+			typeDto.setImageType(typeList.get(String.valueOf(imageIds.get(i))).getImageType());
+			
+			AdmNationImgsDto imgtmp = new AdmNationImgsDto(imageIds.get(i), imgUrls.get(i), originalFileName.get(i), typeDto);
 	        imageGroup.add(imgtmp);
 			
 		}
@@ -106,11 +114,13 @@ public class AdmNationController {
 	public String updateNation(
 			@RequestParam("nationId") Long nationId,  
 			@ModelAttribute AdmNationImgsDto form
-			, @RequestParam(value = "uploadFile", required = false) List<MultipartFile> uploadFiles
-			, RedirectAttributes redirectAttributes) throws IOException{		
+			
+			, RedirectAttributes redirectAttributes) throws IOException{
+		
 		
 		//파일 유효성 검사 추후 추가
-		nationService.updateNation(nationId, form, uploadFiles);
+		nationService.updateNation(nationId, form, form.getUploadFile());
+		
 		
 		return "redirect:adminNation";
 	}
