@@ -2,6 +2,7 @@
 
 <%-- JSTL 라이브러리 사용 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%-- jquery --%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -32,7 +33,7 @@
     -->
     <main class="content-container">
         <section class="content-title-area">
-            <h2 class="content-title">국가 정보 수</h2>
+            <h2 class="content-title">국가 정보 수정</h2>
         </section>
 
         <div class="form-wrapper">
@@ -94,20 +95,35 @@
 					    </label>
                         <input type="file" id="file-upload" name="uploadFile" accept="image/*" multiple style="display: none;" onchange="handleImageUpload(this)">
                     </div>
-                    <div id="imagePreviewContainer" class="image-preview-grid">
-                    	<c:forEach items="${imageGroup}" var="img">
-	                    	<div class="img-card" id ="file_${img.imageId}">
-	                    		<div class="img-box">
-	                    			<img src="${img.imgUrl}">
-	                    			<input type="hidden" name = "imageId" value="${img.imageId}"/>
-	                    		</div>
-	                    		<div class="img-info">
-	                    			<span class="file-name">${img.viewFileName}</span>
-	                    			<button type="button" class="btn-icon-del" onclick="deleteFileImg(${img.imageId})">
-	                    				<span class="material-symbols-outlined">delete</span>
-	                    			</button>
-	                    		</div>
-	                    	</div>
+                    <div id="imagePreview" class="image-preview-grid">
+                    	<c:forEach items="${imageGroup}" var="img" varStatus="status">
+                    		<div id="container_${img.imageId}">
+							<c:set var="stringId">${img.imageId}</c:set>
+							<c:set var="chk_imageType" value="${img.typeList[stringId].imageType}"/>
+                    			<div id="type_${img.imageId}" class="image-type">
+                    				<label class="radio-item">
+                    					<input type="radio" name="typeList[${stringId}].imageType" value="ORIGIN" ${chk_imageType eq 'ORIGIN'? 'checked' : ''}/> 원본
+                    				</label>
+                    				<label class="radio-item">
+                    					<input type="radio" name="typeList[${stringId}].imageType" value="CIRCLE" ${chk_imageType eq 'CIRCLE'? 'checked' : ''}/> 원형
+                    				</label>
+                    				<label class="radio-item">
+                    					<input type="radio" name="typeList[${stringId}].imageType" value="SQUARE" ${chk_imageType eq 'SQUARE'? 'checked' : ''}/> 정사각형
+                    				</label>
+                    			</div>
+		                    	<div class="img-card" id ="file_${img.imageId}">
+		                    		<div class="img-box">
+		                    			<img src="${img.imgUrl}">
+		                    			<input type="hidden" name = "imageId" value="${img.imageId}"/>
+		                    		</div>
+		                    		<div class="img-info">
+		                    			<span class="file-name">${img.viewFileName}</span>
+		                    			<button type="button" class="btn-icon-del" onclick="deleteFileImg(${img.imageId})">
+		                    				<span class="material-symbols-outlined">delete</span>
+		                    			</button>
+		                    		</div>
+		                    	</div>
+		                    </div>
 	                    </c:forEach>
                     </div>
                 </div>
@@ -129,32 +145,65 @@
 					type : 'POST',
 					success : function(response){
 						alert('파일 삭제 성공');
-						document.getElementById('file_'+imageId).remove();
+						document.getElementById('container_'+imageId).remove();
 					}
 				
 				})
-			}
-		
+			}		
 		}
 		
 		// 서버로 보낼 파일들을 담을 배열
 		let selectedFiles = [];
+		
+		// imageGroup은 서버에서 넘어온 기존 이미지 리스트
+    	let imageIndex = ${fn:length(imageGroup)};
+    	
+    	let i = 0;
 
 		/* 이미지 미리 보기*/
 		function handleImageUpload(input) {
-		    const $container = $('#imagePreviewContainer'); 
+		    
+		    const $previewCon = $('#imagePreview'); 
+		    
+		    const typeOption = [
+			    { text: '원본', value: 'ORIGIN' },
+			    { text: '원형', value: 'CIRCLE' },
+			    { text: '정사각형', value: 'SQUARE' }
+			];
 		
 		    Array.from(input.files).forEach(file => {
 		    
 		    	//실제 전송용 파일 추가
 		    	selectedFiles.push(file);
+		    	let newIdx = 'new_' + String(i).padStart(2, '0');
+		    	++i;
 		    	
 		        const reader = new FileReader(); 
 		
 		        // 파일 읽기가 완료되었을 때 실행될 로직(이벤트 핸들러)
 		        reader.onload = function(e) {
+		            
 		            // 1. jQuery 문법으로 카드 생성 ($('<div/>'))
+		            const $container = $('<div/>');
+		            const $div = $('<div/>', {class: 'image-type'});
 		            const $card = $('<div/>', { class: 'img-card' });
+		            
+		            typeOption.forEach((opt, index) => {
+		        		
+		        		const $label = $('<label/>', {class: 'radio-item' });
+		        		
+		        		const $radio = $('<input/>', {
+		        			type: 'radio',
+		        			name: 'typeList[' + newIdx + '].imageType',		        			
+		        			value: opt.value,
+		        			checked: index === 0 
+		        		});
+		        		
+		        		
+		        		$label.append($radio, ' ' + opt.text + ' ');
+		        		$div.append($label);
+		        		
+		        	});
 		
 		            // 2. 이미지 영역 생성
 		            const $imgBox = $('<div/>', { class: 'img-box' }).append(
@@ -169,14 +218,17 @@
 		                    class: 'btn-icon-del',
 		                    html: '<span class="material-symbols-outlined">delete</span>',
 		                    click: function() { 
-		                        $card.fadeOut(200, function() { $(this).remove(); }); 
+		                    	selectedFiles = selectedFiles.filter(f => f !== file);
+		                    	updateInputFiles();
+		                        $container.fadeOut(200, function() { $(this).remove(); }); 
 		                    }
 		                })
 		            );
 		
 		            // 4. 생성한 요소 추가
 		            $card.append($imgBox, $imgInfo);
-		            $container.append($card);
+		            $container.append($div, $card);
+		            $previewCon.append($container);
 		        };
 		
 		        // 실제로 파일을 읽기 시작
@@ -185,6 +237,15 @@
 		
 		    // 같은 파일을 연달아 등록 가능하도록 버튼 초기화
 		    $(input).val("");
+		}
+		
+		function updateInputFiles() {
+		    const dataTransfer = new DataTransfer();
+		    selectedFiles.forEach(file => {
+		        dataTransfer.items.add(file);
+		    });
+		    
+		    document.querySelector('#file-upload').files = dataTransfer.files;
 		}
 		
 		function submitForm() {
@@ -205,6 +266,10 @@
 		    selectedFiles.forEach(file => {
 		        formData.append("uploadFile", file); // 서버 @RequestParam("uploadFile")과 일치
 		    });
+		    
+		    $('input[name$=".imageType"]:checked').each(function() {
+				formData.append($(this).attr('name'), $(this).val());
+			});
 		
 		    $.ajax({
 		        url: '/updateNation',

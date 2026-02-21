@@ -111,9 +111,9 @@
 		    const $previewCon = $('#imagePreview'); 
 		    
 		    const typeOption = [
-			    { id: 'original', text: '원본', value: 'ORIGIN' },
-			    { id: 'circle', text: '원형', value: 'CIRCLE' },
-			    { id: 'square', text: '정사각형', value: 'SQUARE' }
+			    { text: '원본', value: 'ORIGIN' },
+			    { text: '원형', value: 'CIRCLE' },
+			    { text: '정사각형', value: 'SQUARE' }
 			];
 		
 		    Array.from(input.files).forEach(file => {
@@ -135,7 +135,6 @@
 		        		const $radio = $('<input/>', {
 		        			type: 'radio',
 		        			name: 'typeList[' + i + '].imageType',
-		        			id: opt.id,
 		        			value: opt.value,
 		        			checked: index === 0 
 		        		});
@@ -156,6 +155,8 @@
 		                    class: 'btn-icon-del',
 		                    html: '<span class="material-symbols-outlined">delete</span>',
 		                    click: function() { 
+		                    	selectedFiles = selectedFiles.filter(f => f !== file);
+		                    	updateInputFiles();
 		                        $container.fadeOut(200, function() { $(this).remove(); }); 
 		                    }
 		                })
@@ -168,6 +169,15 @@
 		        reader.readAsDataURL(file);
 		    });
 		    $(input).val("");
+		}
+		
+		function updateInputFiles() {
+		    const dataTransfer = new DataTransfer();
+		    selectedFiles.forEach(file => {
+		        dataTransfer.items.add(file);
+		    });
+		    
+		    document.querySelector('#file-upload').files = dataTransfer.files;
 		}
 		
 		function submitForm(){
