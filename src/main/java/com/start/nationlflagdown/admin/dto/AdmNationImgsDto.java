@@ -1,8 +1,12 @@
 package com.start.nationlflagdown.admin.dto;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.start.nationlflagdown.admin.domain.AdmImageVO;
 import com.start.nationlflagdown.admin.domain.AdmNationVO;
@@ -26,7 +30,11 @@ public class AdmNationImgsDto {
 	private List<String> imgUrls = new ArrayList<>();
 	private String imgUrl;
 	
-	private List<ImageTypeDTO> typeList = new ArrayList<>();
+	private Map<String, ImageTypeDTO> typeList = new HashMap<>();
+	
+	private List<MultipartFile> uploadFile;
+	
+	//private Map<Integer, ImageTypeDTO> typeList;
 	
 	//vo에서 toDTO() 메서드 때문에 만들었는데 변환하는 DTO 에서 생성자 만드는게 맞대서 수정
 //	public AdmNationDto(Long nationId, String nationCode, String nationNameKo, String nationNameEn, String capitar, String continent) {
@@ -49,26 +57,28 @@ public class AdmNationImgsDto {
 		this.capitarKo = nationVo.getCapitarKo();
 		this.capitarEn = nationVo.getCapitarEn();
 		this.continent = nationVo.getContinent();
-		//this.setImageIds(imgList.stream().map(AdmImageVO::getImageId).collect(Collectors.toList()));
-		//this.setFileName(imgList.stream().map(AdmImageVO::getFileName).collect(Collectors.toList()));
-		//this.setOriginalFileName(imgList.stream().map(AdmImageVO::getOriginalFileName).collect(Collectors.toList()));
 		this.imageIds = imgList.stream().map(AdmImageVO::getImageId).collect(Collectors.toList());
 		this.fileName = imgList.stream().map(AdmImageVO::getFileName).collect(Collectors.toList());
 		this.originalFileName = imgList.stream().map(AdmImageVO::getOriginalFileName).collect(Collectors.toList());
 		this.imgUrls = imgList.stream().map(img -> "/upload/" + img.getFileName()).collect(Collectors.toList());
 		this.imgUrl = "/upload/" + this.getFileName();
-		this.typeList = typeList.stream().map(img -> {
-			ImageTypeDTO dto = new ImageTypeDTO();
-			dto.setImageType(img.getImageType()); 
-			return dto;
-		}).collect(Collectors.toList());
+		this.typeList = imgList.stream().collect(Collectors.toMap(
+				img -> String.valueOf(img.getImageId()),
+				img -> {
+					ImageTypeDTO dto = new ImageTypeDTO();
+					dto.setImageType(img.getImageType());
+			        return dto;
+				}));
 	}
 	
-	//이미지 삭제에 쓰는 생성자
-	public AdmNationImgsDto(Long imageId, String imgUrl, String originalFileName){
+	public AdmNationImgsDto(Long imageId, String imgUrl, String originalFileName, ImageTypeDTO typeDto){
 		this.setImageId(imageId); 
 		this.setImgUrl(imgUrl);
 		this.setViewFileName(originalFileName);
+		this.typeList = new HashMap<>(); 
+	    if (typeDto != null) {
+	        this.typeList.put(String.valueOf(imageId), typeDto);
+	    }
 	}	
 	
 	public Long getNationId() {
@@ -168,12 +178,19 @@ public class AdmNationImgsDto {
 		this.viewFileName = viewFileName;
 	}
 	
-	public List<ImageTypeDTO> getTypeList() {
+	public Map<String, ImageTypeDTO> getTypeList() {
 		return typeList;
 	}
 
-	public void setTypeList(List<ImageTypeDTO> typeList) {
+	public void setTypeList(Map<String, ImageTypeDTO> typeList) {
 		this.typeList = typeList;
+	}
+	
+	public List<MultipartFile> getUploadFile() {
+	    return uploadFile;
+	}
+	public void setUploadFile(List<MultipartFile> uploadFile) {
+	    this.uploadFile = uploadFile;
 	}
 	
 	//--- 내부 정적 클래스 ---
