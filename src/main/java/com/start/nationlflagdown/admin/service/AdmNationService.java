@@ -25,5 +25,7 @@ public interface AdmNationService {
 	void deleteNation(Long nationId);
 	
 	void deleteNationImg(Long imageId);
+	
+	void checkNationCode(String nationCode);
 
 }

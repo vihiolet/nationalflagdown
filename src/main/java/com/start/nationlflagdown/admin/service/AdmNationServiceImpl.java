@@ -47,6 +47,9 @@ public class AdmNationServiceImpl implements AdmNationService{
 	@Override
 	public Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadFiles) throws IOException {
 		
+		//국가 코드 중복 체크
+		//checkNationCode(form.getNationCode());
+		
 		AdmNationVO nation = AdmNationVO.createNation(form);
 		
 		File uploadDir = new File(fileDir);
@@ -242,5 +245,13 @@ public class AdmNationServiceImpl implements AdmNationService{
 		nationRepository.deleteById(nationId);	
 	}
 
+	//국가코드 중복체크
+	@Override
+	public void checkNationCode(String nationCode) {
+		if(nationRepository.existsByNationCode(nationCode)) {
+			throw new IllegalArgumentException("이미 등록된 국가 코드입니다.");
+		}
+		
+	}
 
 }

@@ -78,6 +78,18 @@ public class AdmNationController {
 		
 	}
 	
+	//국가 코드 중복 체크
+	@GetMapping("/checkNation")
+	public ResponseEntity<String> checkNation(@RequestParam String nationCode){
+		try {
+			nationService.checkNationCode(nationCode);
+			
+			return ResponseEntity.ok("등록 가능한 국가 코드입니다.");
+		}catch(IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+	
 	//글 수정 form
 	@GetMapping("/updateNation")
 	public String updateNationFormView(@RequestParam("nationId") Long nationId, Model model) {

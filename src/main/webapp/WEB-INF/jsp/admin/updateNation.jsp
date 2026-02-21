@@ -43,8 +43,9 @@
                     <label>국가 코드 <span class="required">*</span></label>
                     <div class="input-with-action">
                         <input type="text" id="nationCode" name="nationCode" class="input-code" placeholder="예: KR" maxlength="2" value="${nation.nationCode}">
-                        <button type="button" class="btn-check">중복 확인</button>
+                        <button type="button" id="btnCheckCode" class="btn-check">중복 확인</button>
                         <span class="input-tip">ISO 3166-1 alpha-2 기준 (2자리 영문 대문자)</span>
+                        <span id="msgArea"></span>
                     </div>
                 </div>
                 
@@ -247,6 +248,30 @@
 		    
 		    document.querySelector('#file-upload').files = dataTransfer.files;
 		}
+		
+		$('#btnCheckCode').click(function() {
+			const nationCode = $('#nationCode').val().trim();
+			const $msgArea = $('#msgArea');
+			
+			if(!nationCode){
+				alert("국가 코드를 입력하세요.");
+				return;
+			}
+			
+			$.ajax({
+				type: "GET",
+				url: "/checkNation",
+				data: {"nationCode": nationCode},
+				success: function(response){
+					$msgArea.text(response);
+					$msgArea.css({"color": "#7148fc", "font-size": "12"});
+				},
+				error: function(xhr){
+				 	$msgArea.text(xhr.responseText);
+				 	$msgArea.css({"color": "red", "font-size": "12"});
+				}
+			});
+		});
 		
 		function submitForm() {
 		    const formData = new FormData();

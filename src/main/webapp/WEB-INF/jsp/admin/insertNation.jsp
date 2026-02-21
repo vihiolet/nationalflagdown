@@ -36,8 +36,9 @@
                     <label>국가 코드 <span class="required">*</span></label>
                     <div class="input-with-action">
                         <input type="text" id="nationCode" name="nationCode" class="input-code" placeholder="예: KR" maxlength="2">
-                        <button type="button" class="btn-check">중복 확인</button>
+                        <button type="button" id="btnCheckCode" class="btn-check">중복 확인</button>
                         <span class="input-tip">ISO 3166-1 alpha-2 기준 (2자리 영문 대문자)</span>
+                        <span id="msgArea"></span>
                     </div>
                 </div>
                 
@@ -46,22 +47,22 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>국가명 <span class="required">*</span></label>
-                        <input type="text" id="nationNameKo" name="nationNameKo" placeholder="예: 대한민국">
+                        <input type="text" id="nationNameKo" class="check" name="nationNameKo" placeholder="예: 대한민국">
                     </div>
                     <div class="form-group">
                         <label>영문 국가명</label>
-                        <input type="text" id="nationNameEn" name="nationNameEn" placeholder="예: South Korea">
+                        <input type="text" id="nationNameEn" class="check" name="nationNameEn" placeholder="예: South Korea">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>수도명 <span class="required">*</span></label>
-                        <input type="text" id="capitarKo" name="capitarKo" placeholder="예: 서울">
+                        <input type="text" id="capitarKo" class="check" name="capitarKo" placeholder="예: 서울">
                     </div>
                     <div class="form-group">
                         <label>영문 수도명 <span class="required">*</span></label>
-                        <input type="text" id="capitarEn" name="capitarEn" placeholder="예: Seoul">
+                        <input type="text" id="capitarEn" class="check" name="capitarEn" placeholder="예: Seoul">
                     </div>
                 </div>
 
@@ -94,7 +95,7 @@
 
                 <div class="form-footer">
                     <button type="button" class="btn-secondary" onclick="location.href='/adminNation'">목록</button>
-                    <button type="button" class="btn-primary" onclick="submitForm()">등록</button>
+                    <button type="button" id="btnSubmit" class="btn-primary" onclick="submitForm()" disabled>등록</button>
                 </div>
             </form>
         </div>
@@ -103,6 +104,17 @@
     	let selectedFiles = [];
     	let i = 0;
     	
+    	/* 입력 값 검증 후 버튼 활성화 */
+    	$(document).ready(function(){
+    		$(document).on('input change', '.check', function(){
+				checkFormValidity();		
+			});	
+			$(document).on('input change', '#nationCode', function(){
+				$('#msgArea').empty();
+				checkFormValidity();		
+			});	
+    	});
+		
     	/* 이미지 미리 보기*/
 		function handleImageUpload(input) {
 		
@@ -169,6 +181,7 @@
 		        reader.readAsDataURL(file);
 		    });
 		    $(input).val("");
+		    checkFormValidity();
 		}
 		
 		function updateInputFiles() {
@@ -179,6 +192,59 @@
 		    
 		    document.querySelector('#file-upload').files = dataTransfer.files;
 		}
+		
+		function checkFormValidity(){
+    		let isAllTextFilled  = true;
+    		
+    		$('.check').each(function(){
+				if($(this).val().trim() === ""){
+					isAllTextFilled = false;
+					return false;
+				}
+			});
+			
+			const isSelectedFiles = selectedFiles.length > 0;
+			
+			const isSpanText = $('#msgArea').text().trim().length > 0;
+			
+			if(isAllTextFilled && isSelectedFiles && isSpanText){
+				$('#btnSubmit').prop('disabled', false);
+			}else{
+				$('#btnSubmit').prop('disabled', true);
+			}
+			
+			console.log("isAllTextFilled : " + isAllTextFilled + " isSelectedFiles : " + isSelectedFiles + " isSpanText : " + isSpanText)
+			
+    	}
+		
+		$('#btnCheckCode').click(function() {
+			const nationCode = $('#nationCode').val().trim();
+			const $msgArea = $('#msgArea');
+			
+			if(!nationCode){
+				alert("국가 코드를 입력해주세요.");
+				$('#nationCode').focus();
+				return;
+			}
+			
+			$.ajax({
+				type: "GET",
+				url: "/checkNation",
+				data: {"nationCode": nationCode},
+				success: function(response){
+					$msgArea.text(response);
+					$msgArea.css({"color": "#7148fc", "font-size": "12px"});
+					checkFormValidity();
+				},
+				error: function(xhr){
+				 	$msgArea.text(xhr.responseText);
+				 	$msgArea.css({"color": "red", "font-size": "12px"});
+				 	$('#nationCode').val("");
+				 	$('#btnSubmit').prop('disabled', true);
+				 	$('#nationCode').focus();
+				}
+			});
+		});
 		
 		function submitForm(){
 			const formData = new FormData();
@@ -199,7 +265,6 @@
 				formData.append($(this).attr('name'), $(this).val());
 			});
 			
-			
 			$.ajax({
 				url: '/insertNation',
 				type: 'POST',
@@ -211,7 +276,7 @@
 					location.href = "adminNation";
 				},
 				error: function(xhr){
-					alert("에러 발생: " + xhr.responseText);
+					alert(xhr.responseText);
 				}
 			});
 		}
