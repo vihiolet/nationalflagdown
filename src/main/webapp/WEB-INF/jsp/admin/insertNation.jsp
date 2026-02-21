@@ -213,8 +213,6 @@
 				$('#btnSubmit').prop('disabled', true);
 			}
 			
-			console.log("isAllTextFilled : " + isAllTextFilled + " isSelectedFiles : " + isSelectedFiles + " isSpanText : " + isSpanText)
-			
     	}
 		
 		$('#btnCheckCode').click(function() {
