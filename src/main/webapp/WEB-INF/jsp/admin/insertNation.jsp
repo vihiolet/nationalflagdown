@@ -212,7 +212,6 @@
 			}else{
 				$('#btnSubmit').prop('disabled', true);
 			}
-			
     	}
 		
 		$('#btnCheckCode').click(function() {

@@ -54,22 +54,22 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>국가명</label>
-                        <input type="text" id="nationNameKo" name="nationNameKo" name="nationNameKo" placeholder="예: 대한민국" value="${nation.nationNameKo}">
+                        <input type="text" id="nationNameKo" class="check" name="nationNameKo" name="nationNameKo" placeholder="예: 대한민국" value="${nation.nationNameKo}">
                     </div>
                     <div class="form-group">
                         <label>영문 국가명</label>
-                        <input type="text" id="nationNameEn" name="nationNameEn" placeholder="예: South Korea" value="${nation.nationNameEn}">
+                        <input type="text" id="nationNameEn" class="check" name="nationNameEn" placeholder="예: South Korea" value="${nation.nationNameEn}">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>수도명</label>
-                        <input type="text" id="capitarKo" name="capitarKo" placeholder="예: 서울" value="${nation.capitarKo}">
+                        <input type="text" id="capitarKo" class="check" name="capitarKo" placeholder="예: 서울" value="${nation.capitarKo}">
                     </div>
                     <div class="form-group">
                         <label>영문 수도명</label>
-                        <input type="text" id="capitarEn" name="capitarEn" placeholder="예: Seoul" value="${nation.capitarEn}">
+                        <input type="text" id="capitarEn" class="check" name="capitarEn" placeholder="예: Seoul" value="${nation.capitarEn}">
                     </div>
                 </div>
 
@@ -131,28 +131,13 @@
 
                 <div class="form-footer">
                     <button type="button" class="btn-secondary" onclick="location.href='/adminNation'">목록</button>
-                    <button type="button" onclick="submitForm()" class="btn-primary">수정</button>
+                    <button type="button" id="btnSubmit" onclick="submitForm()" class="btn-primary">수정</button>
                 </div>
             </form>
         </div>
     </main>
     
-	<script>
-		function deleteFileImg(imageId){
-			
-			if(confirm('파일을 삭제하시겠습니까?')){
-				$.ajax({
-					url : '/nationImgDel?imageId=' + imageId,
-					type : 'POST',
-					success : function(response){
-						alert('파일 삭제 성공');
-						document.getElementById('container_'+imageId).remove();
-					}
-				
-				})
-			}		
-		}
-		
+	<script>		
 		// 서버로 보낼 파일들을 담을 배열
 		let selectedFiles = [];
 		
@@ -160,6 +145,23 @@
     	let imageIndex = ${fn:length(imageGroup)};
     	
     	let i = 0;
+    	
+    	let isSelectedFiles = false;
+    	let isSpanText = true;
+    	
+    	/* 입력 값 검증 후 버튼 활성화 */
+    	$(document).ready(function(){
+    	
+    		$(document).on('input change', '.check', function(){
+				checkFormValidity();		
+			});	
+			$(document).on('input change', '#nationCode', function(){
+				isSpanText = false;
+				$('#msgArea').empty();
+				checkFormValidity();		
+			});	
+			
+    	});
 
 		/* 이미지 미리 보기*/
 		function handleImageUpload(input) {
@@ -238,6 +240,7 @@
 		
 		    // 같은 파일을 연달아 등록 가능하도록 버튼 초기화
 		    $(input).val("");
+		    checkFormValidity()
 		}
 		
 		function updateInputFiles() {
@@ -249,12 +252,63 @@
 		    document.querySelector('#file-upload').files = dataTransfer.files;
 		}
 		
+		function deleteFileImg(imageId){
+			
+			if(confirm('파일을 삭제하시겠습니까?')){
+				$.ajax({
+					url : '/nationImgDel?imageId=' + imageId,
+					type : 'POST',
+					success : function(response){
+						alert('파일 삭제 성공');
+						document.getElementById('container_'+imageId).remove();
+					}
+				
+				});
+			}
+			--imageIndex;
+			checkFormValidity();
+		}
+		
+		function checkFormValidity(){
+    		let isAllTextFilled  = true;
+    		
+    		$('.check').each(function(){
+				if($(this).val().trim() === ""){
+					isAllTextFilled = false;
+					return false;
+				}
+			});
+			
+			if(imageIndex > 0 || selectedFiles.length > 0){
+				isSelectedFiles = true;
+			}else{
+				isSelectedFiles = false;
+			}
+			
+			if(isAllTextFilled && isSelectedFiles && isSpanText){
+				$('#btnSubmit').prop('disabled', false);
+			}else{
+				$('#btnSubmit').prop('disabled', true);
+			}
+			
+			console.log("imageIndex: " + imageIndex + " isSelectedFiles : " + isSelectedFiles + " isSpanText : " + isSpanText)
+    	}
+		
 		$('#btnCheckCode').click(function() {
 			const nationCode = $('#nationCode').val().trim();
 			const $msgArea = $('#msgArea');
+			const $originalNationCode = "${nation.nationCode}";
 			
 			if(!nationCode){
 				alert("국가 코드를 입력하세요.");
+				return;
+			}
+			
+			if(nationCode === $originalNationCode){
+				$msgArea.text("변동사항이 없습니다."); 
+				$msgArea.css({"color": "#7148fc", "font-size": "12px"});
+				isSpanText = true;
+				checkFormValidity();
 				return;
 			}
 			
@@ -264,16 +318,22 @@
 				data: {"nationCode": nationCode},
 				success: function(response){
 					$msgArea.text(response);
-					$msgArea.css({"color": "#7148fc", "font-size": "12"});
+					$msgArea.css({"color": "#7148fc", "font-size": "12px"});
+					isSpanText = true;
+					checkFormValidity();
 				},
 				error: function(xhr){
 				 	$msgArea.text(xhr.responseText);
-				 	$msgArea.css({"color": "red", "font-size": "12"});
+				 	$msgArea.css({"color": "red", "font-size": "12px"});
+				 	$('#nationCode').val("");
+				 	$('#btnSubmit').prop('disabled', true);
+				 	$('#nationCode').focus();
 				}
 			});
 		});
 		
 		function submitForm() {
+			
 		    const formData = new FormData();
 		    
 		    const continentValue = $('input[name="continent"]:checked').val();
@@ -307,7 +367,7 @@
 		            location.href = "adminNation";
 		        },
 		        error: function(xhr) {
-		            alert("에러 발생: " + xhr.responseText);
+		            alert(xhr.responseText);
 		        }
 		    });
 		}
