@@ -45,10 +45,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 
 	//글 등록 기능
 	@Override
-	public Long insertNation(AdmNationImgsDto form, List<MultipartFile> uploadFiles) throws IOException {
-		
-		//국가 코드 중복 체크
-		//checkNationCode(form.getNationCode());
+	public Long insertNation(AdmNationImgsDto form) throws IOException {
 		
 		AdmNationVO nation = AdmNationVO.createNation(form);
 		
@@ -57,13 +54,13 @@ public class AdmNationServiceImpl implements AdmNationService{
 			uploadDir.mkdir();
 		}
 		
-		int fileIdx = 0;
-		List<String> sortedKeys = form.getTypeList().keySet().stream()
-				.sorted()
-				.toList();
+		Map<String, ImageTypeDTO> typeList = form.getTypeList();
+	    
+		List<String> sortedKeys = form.getTypeList().keySet().stream().toList();
 		
-		for(String key : sortedKeys) {
-			MultipartFile file = uploadFiles.get(fileIdx++);
+		for (String key : sortedKeys) {
+	        ImageTypeDTO item = typeList.get(key);
+	        MultipartFile file = item.getUploadFile(); 
 			
 			if(!file.isEmpty()) {
 				String originalFileName = file.getOriginalFilename();
@@ -71,8 +68,7 @@ public class AdmNationServiceImpl implements AdmNationService{
 				
 				AdmImageVO image = new AdmImageVO(uniqueFileName, originalFileName);
 				
-				String imageType = form.getTypeList().get(key).getImageType();
-				image.setImageType(imageType);
+				image.setImageType(item.getImageType());
 				
 				nation.addImages(image);
 				
@@ -81,6 +77,8 @@ public class AdmNationServiceImpl implements AdmNationService{
 				}catch(IOException e){
 					throw new IOException("파일 저장 실패: " + e.getMessage(), e);
 				}
+			}else {
+	            System.out.println("로그: " + key + "번 항목에 파일이 없습니다.");
 			}
 		}
 		

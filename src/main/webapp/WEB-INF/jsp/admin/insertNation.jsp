@@ -135,7 +135,9 @@
 		        const reader = new FileReader(); 
 		        reader.onload = function(e) {
 		        
-		        	const $container = $('<div/>');
+		        	const $container = $('<div/>', {class: 'image-group'});
+		        	
+		        	$container.data('fileObj', file);
 		        	
 		            const $div = $('<div/>', {class: 'image-type'});
 		            const $card = $('<div/>', { class: 'image-card' });
@@ -167,9 +169,8 @@
 		                    class: 'btn-icon-del',
 		                    html: '<span class="material-symbols-outlined">delete</span>',
 		                    click: function() { 
-		                    	selectedFiles = selectedFiles.filter(f => f !== file);
-		                    	updateInputFiles();
-		                        $container.fadeOut(200, function() { $(this).remove(); }); 
+								$(this).closest('.image-group').remove();
+    							refreshSelectedFiles();
 		                    }
 		                })
 		            );
@@ -254,12 +255,22 @@
 			formData.append("capitarEn", $('#capitarEn').val());
 			formData.append("continent", continenValue);
 			
-			selectedFiles.forEach(file => {
-				formData.append("uploadFile", file);
-			});
+			console.table(selectedFiles.map((f, i) => ({ index: i, fileName: f.name })));
+
+			let realIndex = 0;
+
+			$('.image-group').each(function() {
+			    const $this = $(this);
+			    const currentType = $this.find('input:checked').val();
+			    
+			    /* .data()에서 직접 파일 꺼내기(인덱스 꼬일 일 없음 */
+			    const currentFile = $this.data('fileObj');
 			
-			$('input[name$=".imageType"]:checked').each(function() {
-				formData.append($(this).attr('name'), $(this).val());
+			    if (currentFile) {
+			        formData.append("typeList[" + realIndex + "].imageType", currentType);
+			        formData.append("typeList[" + realIndex + "].uploadFile", currentFile);
+			        realIndex++;
+			    }
 			});
 			
 			$.ajax({
@@ -276,6 +287,15 @@
 					alert(xhr.responseText);
 				}
 			});
+		}
+		
+		function refreshSelectedFiles() {
+		    selectedFiles = [];
+		    $('.image-group').each(function() {
+		        const file = $(this).data('fileObj');
+		        if (file) selectedFiles.push(file);
+		    });
+		    updateInputFiles();
 		}
     	
     </script>

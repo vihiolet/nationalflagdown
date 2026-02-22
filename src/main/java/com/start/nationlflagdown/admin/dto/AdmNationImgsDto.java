@@ -2,7 +2,7 @@ package com.start.nationlflagdown.admin.dto;
 
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -30,21 +30,7 @@ public class AdmNationImgsDto {
 	private List<String> imgUrls = new ArrayList<>();
 	private String imgUrl;
 	
-	private Map<String, ImageTypeDTO> typeList = new HashMap<>();
-	
-	private List<MultipartFile> uploadFile;
-	
-	//private Map<Integer, ImageTypeDTO> typeList;
-	
-	//vo에서 toDTO() 메서드 때문에 만들었는데 변환하는 DTO 에서 생성자 만드는게 맞대서 수정
-//	public AdmNationDto(Long nationId, String nationCode, String nationNameKo, String nationNameEn, String capitar, String continent) {
-//		this.setNationId(nationId);
-//		this.nationCode = nationCode;
-//		this.nationNameKo = nationNameKo;
-//		this.nationNameEn = nationNameEn;
-//		this.capitar = capitar;
-//		this.continent = continent;
-//	}
+	private Map<String, ImageTypeDTO> typeList = new LinkedHashMap<>();
 
 	public AdmNationImgsDto() {}
 	
@@ -75,7 +61,7 @@ public class AdmNationImgsDto {
 		this.setImageId(imageId); 
 		this.setImgUrl(imgUrl);
 		this.setViewFileName(originalFileName);
-		this.typeList = new HashMap<>(); 
+		this.typeList = new LinkedHashMap<>(); 
 	    if (typeDto != null) {
 	        this.typeList.put(String.valueOf(imageId), typeDto);
 	    }
@@ -186,16 +172,10 @@ public class AdmNationImgsDto {
 		this.typeList = typeList;
 	}
 	
-	public List<MultipartFile> getUploadFile() {
-	    return uploadFile;
-	}
-	public void setUploadFile(List<MultipartFile> uploadFile) {
-	    this.uploadFile = uploadFile;
-	}
-	
 	//--- 내부 정적 클래스 ---
 	public static class ImageTypeDTO{
 		private String imageType; // 라디오 버튼으로 입력받을 값
+		private MultipartFile uploadFile;
 
 		public String getImageType() {
 			return imageType;
@@ -203,6 +183,13 @@ public class AdmNationImgsDto {
 
 		public void setImageType(String imageType) {
 			this.imageType = imageType;
+		}
+		
+		public MultipartFile getUploadFile() {
+		    return uploadFile;
+		}
+		public void setUploadFile(MultipartFile uploadFile) {
+		    this.uploadFile = uploadFile;
 		}
 	}
 
